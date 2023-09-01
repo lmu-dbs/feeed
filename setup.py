@@ -2,12 +2,12 @@ from setuptools import setup, find_packages
 
 setup(
         name = 'feeed',
-        version = '0.1.0',
+        version = '0.0.1',
         description = 'Feature Extraction from Event Data',
-        author = ['Gabriel Tavares', 'Andrea Maldonado'],
-        author_email = ['gabrielmrqstvrs@gmail.com','andreamalher.works@gmail.com'],
+        author = 'Andrea Maldonado, Gabriel Tavares',
+        author_email = 'andreamalher.works@gmail.com, gabrielmrqstvrs@gmail.com',
         license = 'MIT',
-        url='https://github.com/gbrltv/feeed.git',
+        url='https://github.com/lmu-dbs/feeed.git',
         install_requires=[
             'pandas==2.0.0',
             'tqdm==4.65.0',

@@ -24,7 +24,7 @@ pip install feed
 ```
 Run:
 ```shell
-python -c "from feeed.feature_extractor import extract_features; print(extract_features('test_logs/100_4_0.1_0.1_0.1_0.35_0.35_0.xes'))"
+python -c "from feeed.feature_extractor import extract_features; print(extract_features('test_logs/Sepsis.xes'))"
 ```
 
 ## Usage
@@ -49,36 +49,36 @@ Pass sublist ['trace_variant', 'start_activities'] to get a list of values for t
 ```python
 from feeed.feature_extractor import extract_features
 
-features = extract_features("test_logs/100_4_0.1_0.1_0.1_0.35_0.35_0.xes", ['trace_variant', 'start_activities'])
+features = extract_features("test_logs/Sepsis.xes", ['trace_variant', 'start_activities'])
 ```
 
 Output should look like:
 ```python
 {
-'log': '100_4_0.1_0.1_0.1_0.35_0.35_0',
-'ratio_most_common_variant': 0.23,
-'ratio_top_1_variants': 0.0,
-'ratio_top_5_variants': 0.23,
-'ratio_top_10_variants': 0.38,
-'ratio_top_20_variants': 0.61,
-'ratio_top_50_variants': 0.86,
-'ratio_top_75_variants': 0.94,
-'mean_variant_occurrence': 4.545454545454546,
-'std_variant_occurrence': 5.718608164478746,
-'skewness_variant_occurrence': 1.985072284899168,
-'kurtosis_variant_occurrence': 3.0175466630186563,
-'n_unique_start_activities': 3,
-'start_activities_min': 3,
-'start_activities_max': 76,
-'start_activities_mean': 33.333333333333336,
-'start_activities_median': 21.0,
-'start_activities_std': 31.051927834229907,
-'start_activities_variance': 964.2222222222222,
-'start_activities_q1': 12.0,
-'start_activities_q3': 48.5,
-'start_activities_iqr': 36.5,
-'start_activities_skewness': 0.5331183329294154,
-'start_activities_kurtosis': -1.5    
+'log': 'Sepsis'
+'ratio_most_common_variant': 0.03333333333333333
+'ratio_top_1_variants': 0.12
+'ratio_top_5_variants': 0.21523809523809523
+'ratio_top_10_variants': 0.2742857142857143
+'ratio_top_20_variants': 0.35523809523809524
+'ratio_top_50_variants': 0.5971428571428572
+'ratio_top_75_variants': 0.7980952380952381
+'mean_variant_occurrence': 1.2411347517730495
+'std_variant_occurrence': 1.7594085182491936
+'skewness_variant_occurrence': 13.637101374069475
+'kurtosis_variant_occurrence': 217.44268017168216
+'n_unique_start_activities': 6
+'start_activities_min': 6
+'start_activities_max': 995
+'start_activities_mean': 175.0
+'start_activities_median': 12.0
+'start_activities_std': 366.73787187399483
+'start_activities_variance': 134496.66666666666
+'start_activities_q1': 7.75
+'start_activities_q3': 17.0
+'start_activities_iqr': 9.25
+'start_activities_skewness': 1.7883562472303318
+'start_activities_kurtosis': 1.199106773708694
 }
 ```
 
@@ -89,112 +89,111 @@ Get a full list of all feature values
 ```python
 from feeed.feature_extractor import extract_features
 
-features = extract_features("test_logs/100_4_0.1_0.1_0.1_0.35_0.35_0.xes")
+features = extract_features("test_logs/Sepsis.xes")
 
 ```
 Output should look like:
 ```python
 {
-'log': '100_4_0.1_0.1_0.1_0.35_0.35_0',
-'n_traces': 100,
-'n_unique_traces': 22,
-'ratio_unique_traces_per_trace': 0.22,
-'trace_len_min': 2,
-'trace_len_max': 4,
-'trace_len_mean': 2.95,
-'trace_len_median': 3.0,
-'trace_len_mode': 3,
-'trace_len_std': 0.7399324293474372,
-'trace_len_variance': 0.5475000000000001,
-'trace_len_q1': 2.0,
-'trace_len_q3': 3.25,
-'trace_len_iqr': 1.25,
-'trace_len_geometric_mean': 2.854490231707705,
-'trace_len_geometric_std': 1.2984764500078683,
-'trace_len_harmonic_mean': 2.758620689655172,
-'trace_len_skewness': 0.07960741718130866,
-'trace_len_kurtosis': -1.1710764996559713,
-'trace_len_coefficient_variation': 0.25082455232116513,
-'trace_len_entropy': 4.573311200693104,
-'trace_len_hist1': 1.4999999999999987,
-'trace_len_hist2': 0.0,
-'trace_len_hist3': 0.0,
-'trace_len_hist4': 0.0,
-'trace_len_hist5': 0.0,
-'trace_len_hist6': 2.2499999999999982,
-'trace_len_hist7': 0.0,
-'trace_len_hist8': 0.0,
-'trace_len_hist9': 0.0,
-'trace_len_hist10': 1.249999999999999,
-'trace_len_skewness_hist': 0.07960741718130866,
-'trace_len_kurtosis_hist': -1.1710764996559713,
-'ratio_most_common_variant': 0.23,
-'ratio_top_1_variants': 0.0,
-'ratio_top_5_variants': 0.23,
-'ratio_top_10_variants': 0.38,
-'ratio_top_20_variants': 0.61,
-'ratio_top_50_variants': 0.86,
-'ratio_top_75_variants': 0.94,
-'mean_variant_occurrence': 4.545454545454546,
-'std_variant_occurrence': 5.718608164478746,
-'skewness_variant_occurrence': 1.985072284899168,
-'kurtosis_variant_occurrence': 3.0175466630186563,
-'n_unique_activities': 4,
-'activities_min': 46,
-'activities_max': 100,
-'activities_mean': 73.75,
-'activities_median': 74.5,
-'activities_std': 26.271419832205492,
-'activities_variance': 690.1875,
-'activities_q1': 48.25,
-'activities_q3': 100.0,
-'activities_iqr': 51.75,
-'activities_skewness': -0.004885988614644778,
-'activities_kurtosis': -1.9934880032201305,
-'n_unique_start_activities': 3,
-'start_activities_min': 3,
-'start_activities_max': 76,
-'start_activities_mean': 33.333333333333336,
-'start_activities_median': 21.0,
-'start_activities_std': 31.051927834229907,
-'start_activities_variance': 964.2222222222222,
-'start_activities_q1': 12.0,
-'start_activities_q3': 48.5,
-'start_activities_iqr': 36.5,
-'start_activities_skewness': 0.5331183329294154,
-'start_activities_kurtosis': -1.5,
-'n_unique_end_activities': 4,
-'end_activities_min': 15,
-'end_activities_max': 31,
-'end_activities_mean': 25.0,
-'end_activities_median': 27.0,
-'end_activities_std': 6.041522986797286,
-'end_activities_variance': 36.5,
-'end_activities_q1': 23.25,
-'end_activities_q3': 28.75,
-'end_activities_iqr': 5.5,
-'end_activities_skewness': -0.8570822627169729,
-'end_activities_kurtosis': -0.8648902233064364,
-'entropy_trace': 3.631,
-'entropy_prefix': 3.681,
-'entropy_global_block': 4.201,
-'entropy_lempel_ziv': 0.64,
-'entropy_k_block_diff_1': 1.108,
-'entropy_k_block_diff_3': 1.108,
-'entropy_k_block_diff_5': 1.108,
-'entropy_k_block_ratio_1': 1.906,
-'entropy_k_block_ratio_3': 1.906,
-'entropy_k_block_ratio_5': 1.906,
-'entropy_knn_3': 1.932,
-'entropy_knn_5': 1.506,
-'entropy_knn_7': 1.231,
-'variant_entropy': 93.64262454248438,
-'normalized_variant_entropy': 0.7258742202126273,
-'sequence_entropy': 466.3347685080803,
-'normalized_sequence_entropy': 0.27796776430354214,
-'sequence_entropy_linear_forgetting': 244.29290431274163,
-'normalized_sequence_entropy_linear_forgetting': 0.1456154613225141,
-'sequence_entropy_exponential_forgetting': 302.4021423657002,
-'normalized_sequence_entropy_exponential_forgetting': 0.18025258486069465
+'log': 'Sepsis'
+'n_traces': 1050
+'n_unique_traces': 846
+'ratio_unique_traces_per_trace': 0.8057142857142857
+'trace_len_min': 3
+'trace_len_max': 185
+'trace_len_mean': 14.48952380952381
+'trace_len_median': 13.0
+'trace_len_mode': 8
+'trace_len_std': 11.470474925273926
+'trace_len_variance': 131.57179501133788
+'trace_len_q1': 9.0
+'trace_len_q3': 16.0
+'trace_len_iqr': 7.0
+'trace_len_geometric_mean': 12.281860759040903
+'trace_len_geometric_std': 1.7464004837799154
+'trace_len_harmonic_mean': 10.47731701485374
+'trace_len_skewness': 7.250526815880918
+'trace_len_kurtosis': 87.0376906898399
+'trace_len_coefficient_variation': 0.7916391922924689
+'trace_len_entropy': 6.769403523350811
+'trace_len_hist1': 0.048613291470434326
+'trace_len_hist2': 0.005285190999476714
+'trace_len_hist3': 0.0005756148613291472
+'trace_len_hist4': 0.0002093144950287807
+'trace_len_hist5': 0.00010465724751439036
+'trace_len_hist6': 0.0
+'trace_len_hist7': 5.232862375719522e-05
+'trace_len_hist8': 0.0
+'trace_len_hist9': 0.0
+'trace_len_hist10': 0.00010465724751439027
+'trace_len_skewness_hist': 7.250526815880918
+'trace_len_kurtosis_hist': 87.0376906898399
+'ratio_most_common_variant': 0.03333333333333333
+'ratio_top_1_variants': 0.12
+'ratio_top_5_variants': 0.21523809523809523
+'ratio_top_10_variants': 0.2742857142857143
+'ratio_top_20_variants': 0.35523809523809524
+'ratio_top_50_variants': 0.5971428571428572
+'ratio_top_75_variants': 0.7980952380952381
+'mean_variant_occurrence': 1.2411347517730495
+'std_variant_occurrence': 1.7594085182491936
+'skewness_variant_occurrence': 13.637101374069475
+'kurtosis_variant_occurrence': 217.44268017168216
+'n_unique_activities': 16
+'activities_min': 6
+'activities_max': 3383
+'activities_mean': 950.875
+'activities_median': 788.0
+'activities_std': 1008.5815457239935
+'activities_variance': 1017236.734375
+'activities_q1': 101.75
+'activities_q3': 1085.25
+'activities_iqr': 983.5
+'activities_skewness': 1.3912385607018212
+'activities_kurtosis': 1.05777753209275
+'n_unique_start_activities': 6
+'start_activities_min': 6
+'start_activities_max': 995
+'start_activities_mean': 175.0
+'start_activities_median': 12.0
+'start_activities_std': 366.73787187399483
+'start_activities_variance': 134496.66666666666
+'start_activities_q1': 7.75
+'start_activities_q3': 17.0
+'start_activities_iqr': 9.25
+'start_activities_skewness': 1.7883562472303318
+'start_activities_kurtosis': 1.199106773708694
+'n_unique_end_activities': 14
+'end_activities_min': 2
+'end_activities_max': 393
+'end_activities_mean': 75.0
+'end_activities_median': 32.5
+'end_activities_std': 112.91400014423114
+'end_activities_variance': 12749.57142857143
+'end_activities_q1': 14.0
+'end_activities_q3': 53.5
+'end_activities_iqr': 39.5
+'end_activities_skewness': 2.004413358907822
+'end_activities_kurtosis': 2.5007579343413617
+'entropy_trace': 9.334
+'entropy_prefix': 10.227
+'entropy_global_block': 14.501
+'entropy_lempel_ziv': 1.727
+'entropy_k_block_diff_1': -0.019
+'entropy_k_block_diff_3': 1.837
+'entropy_k_block_diff_5': 1.712
+'entropy_k_block_ratio_1': 2.262
+'entropy_k_block_ratio_3': 3.238
+'entropy_k_block_ratio_5': 2.538
+'entropy_knn_3': 4.956
+'entropy_knn_5': 4.49
+'entropy_knn_7': 4.191
+'variant_entropy': 40624.49329803771
+'normalized_variant_entropy': 0.6957588422064969
+'sequence_entropy': 76528.6794749776
+'normalized_sequence_entropy': 0.5223430410751398
+'sequence_entropy_linear_forgetting': 32139.284589305265
+'normalized_sequence_entropy_linear_forgetting': 0.21936523360299368
+'sequence_entropy_exponential_forgetting': 43880.53919110408
+'normalized_sequence_entropy_exponential_forgetting': 0.29950463593968696
 }
-```

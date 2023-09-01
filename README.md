@@ -12,7 +12,6 @@
 - [Java](https://www.java.com/en/download/)
 
 ### Clone
-
 Clone this repo to your local machine using
 
 ```shell

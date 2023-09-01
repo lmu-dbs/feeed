@@ -20,8 +20,7 @@ git clone git@github.com:lmu-dbs/feeed.git
 
 To directly use meta feature extraction methods via `import`
 ```shell
-cd feeed
-pip install -e .
+pip install feed
 ```
 Run:
 ```shell

@@ -6,6 +6,7 @@ from .start_activities import start_activities
 from .end_activities import end_activities
 from .entropies import entropies
 from .complexity import complexity
+from .time import extract_time_features
 
 from datetime import datetime as dt
 from pm4py.objects.log.importer.xes import importer as xes_importer
@@ -27,6 +28,7 @@ def extract_features(event_logs_path, feature_types=None):
             "end_activities",
             "entropies",
             "complexity",
+            "extract_time_features",
         ]
 
     features = {"log": log_name.split(".xes")[0]}

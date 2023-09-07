@@ -18,7 +18,7 @@ class Timestamp:
     """
     @classmethod
     def execution_time(cls, group, ix_list, time_col="time:timestamp", **kwargs):
-        return group[time_col].diff().loc[ix_list].dt.total_seconds().fillna(0)
+        return group[time_col].diff().loc[ix_list, time_col].dt.total_seconds().fillna(0)
 
     @classmethod
     def accumulated_time(cls, group, ix_list, time_col="time:timestamp", **kwargs):
@@ -91,7 +91,7 @@ def meta(time):
         "time_kurtosis_hist": time_kurtosis_hist,
     }
 
-def extract_time_features(log):
+def time_based(log):
     # if has_pandarallel:
     #     # parallelizes pandas apply
     #     pandarallel.initialize(nb_workers=min(os.cpu_count(), 20))
@@ -102,7 +102,7 @@ def extract_time_features(log):
     else:
         l = log.copy()
     available_features = get_available_time_features()
-    group = l.groupby("case:concept:name")
+    group = l.groupby("case:concept:name", as_index=False, observed=True)
     kwargs = {
         "group": group,
         "ix_list": l.index,
@@ -119,8 +119,8 @@ def extract_time_features(log):
     time_features = l[available_features].apply(lambda x: meta(x))
     time_features = time_features.to_dict()
     # flattening the output dict to follow the original demo format
-    flat = dict()
+    results = dict()
     for tf in time_features:
-        flat.update({f"{tf}_{k}": v for k,v in time_features[tf].items()})
+        results.update({f"{tf}_{k}": v for k,v in time_features[tf].items()})
     
-    return flat
+    return results

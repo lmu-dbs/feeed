@@ -18,7 +18,7 @@ class Timestamp:
     """
     @classmethod
     def execution_time(cls, group, ix_list, time_col="time:timestamp", **kwargs):
-        return group[time_col].diff().loc[ix_list, time_col].dt.total_seconds().fillna(0)
+        return group[time_col].diff().loc[ix_list].dt.total_seconds().fillna(0)
 
     @classmethod
     def accumulated_time(cls, group, ix_list, time_col="time:timestamp", **kwargs):
@@ -51,7 +51,7 @@ def meta(time):
     time_max = np.max(time)
     time_mean = np.mean(time)
     time_median = np.median(time)
-    time_mode = stats.mode(time)[0][0]
+    time_mode = stats.mode(time, keepdims=True)[0][0]
     time_std = np.std(time)
     time_variance = np.var(time)
     time_q1 = np.percentile(time, 25)
@@ -102,7 +102,7 @@ def time_based(log):
     else:
         l = log.copy()
     available_features = get_available_time_features()
-    group = l.groupby("case:concept:name", as_index=False, observed=True)
+    group = l.groupby("case:concept:name", as_index=False, observed=True, group_keys=False)
     kwargs = {
         "group": group,
         "ix_list": l.index,

@@ -8,20 +8,13 @@
 - [Extending Features](#extending-features)
 
 ## Installation
-### Requirements
+Requirements:
 - Python > 3.9
 - [Java](https://www.java.com/en/download/)
 
-### Clone
-Clone this repo to your local machine using
-
-```shell
-git clone git@github.com:lmu-dbs/feeed.git
-```
-
 To directly use meta feature extraction methods via `import`
 ```shell
-pip install feed
+pip install feeed
 ```
 Run:
 ```shell
@@ -262,7 +255,7 @@ outputs
 ```
 
 ## Extending Features
-This is a tutorial for extending this tool to include additional features (e.g. time-based). As an example for this tutorial, we focus on the example of time-based features. The `feeed/time.py` is a script that currently contains the class `Timestamp`, which extracts features from timestamps. FEEED focuses and extracts features of the whole log only (e.g., time within the day).
+This tutorial is for extending this tool to include additional features (e.g. time-based). As an example for this tutorial, we focus on the example of time-based features. The `feeed/time.py` script contains the class `Timestamp`, which extracts features from timestamps. FEEED focuses and extracts features of the whole log only (e.g., time within the day).
 
 ### Assumptions and conditions
 To include new features in this repo, first consider the following:
@@ -273,6 +266,7 @@ To include new features in this repo, first consider the following:
 If both conditions apply, move on to implementation.
 
 ### Implementing any `NewFeature` class
+* Clone this repo to your local machine using `git clone git@github.com:lmu-dbs/feeed.git`
 * Include the new module containing the `new_feature` computation in `feeed/`, resulting in `feed/new_feature_type.py` (e.g. `feed/time.py`).
 * Import the new method in `feeed/feature_extractor.py` (e.g. `from .time import time_based`)
    * Ensure output of the `NewFeature` class is a dict of the sort: `{"feature_1": value1, "feature_2": value2}`.

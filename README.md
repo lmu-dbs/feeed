@@ -29,9 +29,17 @@ python -c "from feeed.feature_extractor import extract_features; print(extract_f
 ```
 
 ## Usage
+Output data contains at least one `feature` and a corresponding value obtained by that feature's specific computation. The schema looks like this:
+```python
+{
+'log': 'Sepsis'
+'feature': value
+}
+```
+Every `feature` belongs to a `feature_type`, and a `feature_type` can comprise multiple features. The correspondence between `feature_type` and `feature` is presented in [Feature Types](###featuretypes) table below. 
 
 ### Feature types
-Specific features can be selected refering their feature types:
+Specific features can be selected referring to their feature types:
 
 | Feature Type     | Features                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 |------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -47,34 +55,16 @@ Specific features can be selected refering their feature types:
 
 ### Examples
 #### Example 1:
-Pass sublist ['trace_variant', 'start_activities'] to get a list of values for the features 'trace_variant' and 'start_activities' only
+Passing sublist of feature_types, e.g. ['start_activities'], to get a list of values for the feature type 'start_activities' only
 ```python
 from feeed.feature_extractor import extract_features
 
-features = extract_features("test_logs/Sepsis.xes", ['trace_variant', 'start_activities'])
+features = extract_features("test_logs/Sepsis.xes", ['start_activities'])
 ```
-
-The output data containg a `feature_type` and a `summary` value obtained by certain aggregatino fucntions. The schema looks like:
+outputs
 ```python
 {
 'log': 'Sepsis'
-'featureType_summary': value
-}
-```
-<!-- ```python
-{
-'log': 'Sepsis'
-'ratio_most_common_variant': 0.03333333333333333
-'ratio_top_1_variants': 0.12
-'ratio_top_5_variants': 0.21523809523809523
-'ratio_top_10_variants': 0.2742857142857143
-'ratio_top_20_variants': 0.35523809523809524
-'ratio_top_50_variants': 0.5971428571428572
-'ratio_top_75_variants': 0.7980952380952381
-'mean_variant_occurrence': 1.2411347517730495
-'std_variant_occurrence': 1.7594085182491936
-'skewness_variant_occurrence': 13.637101374069475
-'kurtosis_variant_occurrence': 217.44268017168216
 'n_unique_start_activities': 6
 'start_activities_min': 6
 'start_activities_max': 995
@@ -88,19 +78,17 @@ The output data containg a `feature_type` and a `summary` value obtained by cert
 'start_activities_skewness': 1.7883562472303318
 'start_activities_kurtosis': 1.199106773708694
 }
-``` -->
-
-
+```
 
 #### Example 2:
-Get a full list of all feature values
+By not passing any list of feature_types to get the full list of all feature values for all feature_types,
 ```python
 from feeed.feature_extractor import extract_features
 
 features = extract_features("test_logs/Sepsis.xes")
 
 ```
-Output should look like:
+outputs
 ```python
 {
 'accumulated_time_time_coefficient_variation': 4.039353340541942
@@ -274,16 +262,15 @@ Output should look like:
 ```
 
 ## Tutorial for extending to additional features (e.g. time-based)
-
 ### Overview
-
-In order to colaborate and include new features in this repo, consider:
+To include new features in this repo, consider:
 
 * defining if the proposed feature is log-level, opposed to single event, trace, activity level.
 * Next, check for dependency and Python version compatibility with this current repo (see `setup.py`).
 * The class/method needs to be called by including it in the list of feeed/feature_extractor.py and importing the new method accordingly. Furthermore, the "feature type" needs to be included in the exception of feeed/feature_extractor.py
 * The new "feature type" and its features (i.e. summary obtained by aggregation/statistic functions) need to be included in the README.md table
 * The output of the newFeature class needs to be a dict of the sort: `{"featureType_summary1": value1, "featureType_summary2": value2}`
+
 
 ### Example 
 

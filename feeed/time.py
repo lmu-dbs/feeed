@@ -101,6 +101,12 @@ def time_based(log):
         l = pm4py.convert_to_dataframe(log)
     else:
         l = log.copy()
+    
+    try:
+        l["time:timestamp"] = pd.to_datetime(l["time:timestamp"])
+    except:
+        l["time:timestamp"] = pd.to_datetime(l["time:timestamp"], format="mixed")
+    l = l.sort_values(by=["time:timestamp"]).reset_index(drop=True)
     available_features = get_available_time_features()
     group = l.groupby("case:concept:name", as_index=False, observed=True, group_keys=False)
     kwargs = {

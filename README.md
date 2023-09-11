@@ -54,8 +54,14 @@ from feeed.feature_extractor import extract_features
 features = extract_features("test_logs/Sepsis.xes", ['trace_variant', 'start_activities'])
 ```
 
-Output should look like:
+The output data containg a `feature_type` and a `summary` value obtained by certain aggregatino fucntions. The schema looks like:
 ```python
+{
+'log': 'Sepsis'
+'featureType_summary': value
+}
+```
+<!-- ```python
 {
 'log': 'Sepsis'
 'ratio_most_common_variant': 0.03333333333333333
@@ -82,7 +88,7 @@ Output should look like:
 'start_activities_skewness': 1.7883562472303318
 'start_activities_kurtosis': 1.199106773708694
 }
-```
+``` -->
 
 
 
@@ -102,16 +108,6 @@ Output should look like:
 'accumulated_time_time_geometric_mean': 10904.332835327972
 'accumulated_time_time_geometric_std': 44.90292804116573
 'accumulated_time_time_harmonic_mean': 0.0
-'accumulated_time_time_hist0': 2.6951738756336187e-07
-'accumulated_time_time_hist1': 2.17962865226352e-09
-'accumulated_time_time_hist2': 1.080807596163729e-09
-'accumulated_time_time_hist3': 3.9629611859336717e-10
-'accumulated_time_time_hist4': 3.242422788491186e-10
-'accumulated_time_time_hist5': 2.34174979168808e-10
-'accumulated_time_time_hist6': 1.2609421955243496e-10
-'accumulated_time_time_hist7': 5.4040379808186465e-11
-'accumulated_time_time_hist8': 5.4040379808186465e-11
-'accumulated_time_time_hist9': 9.006729968031069e-11
 'accumulated_time_time_iqr': 272655.0
 'accumulated_time_time_kurtosis': 172.57258047803998
 'accumulated_time_time_kurtosis_hist': 5.1101603988544575
@@ -148,21 +144,32 @@ Output should look like:
 'end_activities_skewness': 2.004413358907822
 'end_activities_std': 112.91400014423114
 'end_activities_variance': 12749.57142857143
+'entropy_trace': 3.631,
+'entropy_prefix': 3.681,
+'entropy_global_block': 4.201,
+'entropy_lempel_ziv': 0.64,
+'entropy_k_block_diff_1': 1.108,
+'entropy_k_block_diff_3': 1.108,
+'entropy_k_block_diff_5': 1.108,
+'entropy_k_block_ratio_1': 1.906,
+'entropy_k_block_ratio_3': 1.906,
+'entropy_k_block_ratio_5': 1.906,
+'entropy_knn_3': 1.932,
+'entropy_knn_5': 1.506,
+'entropy_knn_7': 1.231,
+'variant_entropy': 93.64262454248438,
+'normalized_variant_entropy': 0.7258742202126273,
+'sequence_entropy': 466.3347685080803,
+'normalized_sequence_entropy': 0.27796776430354214,
+'sequence_entropy_linear_forgetting': 244.29290431274163,
+'normalized_sequence_entropy_linear_forgetting': 0.1456154613225141,
+'sequence_entropy_exponential_forgetting': 302.4021423657002,
+'normalized_sequence_entropy_exponential_forgetting': 0.18025258486069465
 'execution_time_time_coefficient_variation': 8.499578843161144
 'execution_time_time_entropy': 6.221052534222753
 'execution_time_time_geometric_mean': 199.88320191111325
 'execution_time_time_geometric_std': 127.92792986844444
 'execution_time_time_harmonic_mean': 0.0
-'execution_time_time_hist0': 2.7448347367316943e-07
-'execution_time_time_hist1': 1.002762607241735e-09
-'execution_time_time_hist2': 6.928178013670171e-10
-'execution_time_time_hist3': 3.2817685327911313e-10
-'execution_time_time_hist4': 3.2817685327911313e-10
-'execution_time_time_hist5': 2.552486636615327e-10
-'execution_time_time_hist6': 9.116023702197587e-11
-'execution_time_time_hist7': 5.469614221318552e-11
-'execution_time_time_hist8': 7.292818961758069e-11
-'execution_time_time_hist9': 7.292818961758069e-11
 'execution_time_time_iqr': 18623.25
 'execution_time_time_kurtosis': 250.48825320470718
 'execution_time_time_kurtosis_hist': 5.110914600502133
@@ -198,16 +205,6 @@ Output should look like:
 'remaining_time_time_geometric_mean': 224736.22203397762
 'remaining_time_time_geometric_std': 70.1715364379747
 'remaining_time_time_harmonic_mean': 0.0
-'remaining_time_time_hist0': 2.1808895944590443e-07
-'remaining_time_time_hist1': 2.1580125003402454e-08
-'remaining_time_time_hist2': 1.4590902548210341e-08
-'remaining_time_time_hist3': 6.8991551555118015e-09
-'remaining_time_time_hist4': 4.503364984015537e-09
-'remaining_time_time_hist5': 3.818853506445177e-09
-'remaining_time_time_hist6': 1.6572383141177165e-09
-'remaining_time_time_hist7': 9.006729968031077e-10
-'remaining_time_time_hist8': 7.385518573785483e-10
-'remaining_time_time_hist9': 1.2789556554604117e-09
 'remaining_time_time_iqr': 2284557.5
 'remaining_time_time_kurtosis': 11.66672043634066
 'remaining_time_time_kurtosis_hist': 4.950830339077765
@@ -240,16 +237,6 @@ Output should look like:
 'trace_len_geometric_mean': 12.281860759040898
 'trace_len_geometric_std': 1.7464004837799154
 'trace_len_harmonic_mean': 10.47731701485374
-'trace_len_hist1': 0.048613291470434326
-'trace_len_hist10': 0.00010465724751439027
-'trace_len_hist2': 0.005285190999476714
-'trace_len_hist3': 0.0005756148613291472
-'trace_len_hist4': 0.0002093144950287807
-'trace_len_hist5': 0.00010465724751439036
-'trace_len_hist6': 0.0
-'trace_len_hist7': 5.232862375719522e-05
-'trace_len_hist8': 0.0
-'trace_len_hist9': 0.0
 'trace_len_iqr': 7.0
 'trace_len_kurtosis': 87.03769068983992
 'trace_len_kurtosis_hist': 87.03769068983992
@@ -269,16 +256,6 @@ Output should look like:
 'within_day_time_geometric_mean': 35069.233548115764
 'within_day_time_geometric_std': 1.9726454507370417
 'within_day_time_harmonic_mean': 0.0
-'within_day_time_hist0': 3.2487851331575074e-06
-'within_day_time_hist1': 2.617288257157336e-06
-'within_day_time_hist2': 3.474754497220219e-05
-'within_day_time_hist3': 1.1808230741593563e-05
-'within_day_time_hist4': 1.2667979500485362e-05
-'within_day_time_hist5': 1.3687504577401301e-05
-'within_day_time_hist6': 1.1876706306461051e-05
-'within_day_time_hist7': 9.822439360436398e-06
-'within_day_time_hist8': 9.297460029785654e-06
-'within_day_time_hist9': 5.980199331760658e-06
 'within_day_time_iqr': 34486.25
 'within_day_time_kurtosis': -0.9142275965359783
 'within_day_time_kurtosis_hist': 2.6115894228132266
@@ -298,30 +275,60 @@ Output should look like:
 
 ## Tutorial for extending to additional features (e.g. time-based)
 
-For this tutorial, we focus on the example of time-based features. The `feeed/time.py` is a script that currently contains the class `Timestamp`, which extracts knowledge from timestamps. In summary, features could be extracted from groups (i.e., cases) or from the whole log (e.g., time within the day).
+### Overview
 
-Implementing each time-based feature as `@classmethods` within this class allows us to easily scale and manage features. A tiny botleneck is that each class method should accept `**kwargs` regardless of the other arguments (but this can be internaly handled in the future). Each class method is accessed by inspecting the object using `inspect.getmembers`. 
+In order to colaborate and include new features in this repo, consider:
 
-All the features are currently measured in seconds, and they include include:
+* defining if the proposed feature is log-level, opposed to single event, trace, activity level.
+* Next, check for dependency and Python version compatibility with this current repo (see `setup.py`).
+* The class/method needs to be called by including it in the list of feeed/feature_extractor.py and importing the new method accordingly. Furthermore, the "feature type" needs to be included in the exception of feeed/feature_extractor.py
+* The new "feature type" and its features (i.e. summary obtained by aggregation/statistic functions) need to be included in the README.md table
+* The output of the newFeature class needs to be a dict of the sort: `{"featureType_summary1": value1, "featureType_summary2": value2}`
+
+### Example 
+
+As an example for this tutorial, let us we focus on the example of time-based features. The `feeed/time.py` is a script that currently contains the class `Timestamp`, which extracts knowledge from timestamps. In summary, features could be extracted from groups (i.e., cases) or from the whole log (e.g., time within the day).
+
+<!-- Implementing each time-based feature as `@classmethods` within this class allows us to easily scale and manage features. A tiny botleneck is that each class method should accept `**kwargs` regardless of the other arguments (but this can be internaly handled in the future). Each class method is accessed by inspecting the object using `inspect.getmembers`.  -->
+
+All the time features are currently measured in seconds, and they include:
 
 - `execution_time`: execution time of an event w.r.t. to the previous one
 - `accumulated_time`: accumulated time of an event w.r.t. to the first one from a trace
 - `remaining_time`: remaining time of an event w.r.t. to the last one from a trace
 - `within_day`: time within the day 
 
-There are methods that accept `group` or `X` as arguments. The former consists of a trace (i.e., grouped by case id) since we evaluate, for instance, the event timestamp with the previous one. The latter consists of the whole event log, since some operations can be performed element-wise (e.g., extracting the weekday from a timestamp column).
+Essentially, there are methods that accept `group` or `X` as arguments. The former consists of a trace (i.e., grouped by case id) since we evaluate, for instance, the event timestamp with the previous one. The latter consists of the whole event log, since some operations can be performed element-wise (e.g., extracting the weekday from a timestamp column).
 
 ### Implementing any `NewFeature` class
 
-See an example of how to implement a new feature extraction class:
+Below, see an example of pseudo code of how to implement a new (generic) feature extraction class:
 
 ```python
+import inspect
+
 class NewFeature:
     @classmethod
     def foo(cls, **kwargs):
-        return kwargs["X"] ** 2
+        return kwargs["event_attribute"] ** 2
     
     @classmethod
     def bar(cls, **kwargs):
-        return kwargs["group"] + 1
+        return kwargs["event_attribute"] + 1
+
+def extract_new_feature():
+    available_class_methods = inspect.getmembers(NewFeature, predicate=inspect.ismethod)
+    output = {}
+    for feature_name, feature_fn in available_class_methods:
+        arr_values = feature_fn(log)
+        output[f"NewFeature_{feature_name}"] = summarize(arr_values)
+
+    return output
+```
+### Testing the new implementation
+
+After implementing the new feature and including it in the list of `feeed/feature_extractor.py` and importing the new method accordingly, you can quickly test it by running:
+
+```bash
+python -c "from feeed.feature_extractor import extract_features; print(extract_features('/home/seidi/datasets/logs/sepsis/SEPSIS.xes', ['extract_new_feature']))"
 ```

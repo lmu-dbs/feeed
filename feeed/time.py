@@ -3,6 +3,22 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
+
+"""
+Implementing each time-based feature as `@classmethods` within this class allows us to scale and manage features easily. 
+A current bottleneck is that each class method should accept `**kwargs` regardless of the other arguments, which
+can be internally handled in the future. Each class method is accessed by inspecting the object using `inspect.getmembers`.
+
+All the time features are currently measured in seconds, and they include:
+
+- `execution_time`: execution time of an event w.r.t. to the previous one
+- `accumulated_time`: accumulated time of an event w.r.t. to the first one from a trace
+- `remaining_time`: remaining time of an event w.r.t. to the last one from a trace
+- `within_day`: time within the day 
+
+Essentially, there are methods that accept `group` or `X` as arguments. The former consists of a trace (i.e., grouped by case id) since we evaluate, for instance, the event timestamp with the previous one. The latter consists of the whole event log, since some operations can be performed element-wise (e.g., extracting the weekday from a timestamp column).
+"""
+
 warnings.filterwarnings("ignore")
 
 # try:

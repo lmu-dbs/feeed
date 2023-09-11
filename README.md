@@ -5,7 +5,7 @@
 
 - [Installation](#installation)
 - [Usage](#usage)
-- [Extending](#extending)
+- [Extending Features](#extending-features)
 
 ## Installation
 ### Requirements
@@ -36,7 +36,7 @@ Output data contains at least one `feature` and a corresponding value obtained b
 'feature': value
 }
 ```
-Every `feature` belongs to a `feature_type`, and a `feature_type` can comprise multiple features. The correspondence between `feature_type` and `feature` is presented in [Feature Types](###featuretypes) table below. 
+Every `feature` belongs to a `feature_type`, and a `feature_type` can comprise multiple features. The following Feature Types table presents the correspondence between `feature_type` and `feature`. 
 
 ### Feature types
 Specific features can be selected referring to their feature types:
@@ -261,33 +261,24 @@ outputs
 }
 ```
 
-## Tutorial for extending to additional features (e.g. time-based)
-### Overview
-To include new features in this repo, consider:
+## Extending Features
+This is a tutorial for extending this tool to include additional features (e.g. time-based). As an example for this tutorial, we focus on the example of time-based features. The `feeed/time.py` is a script that currently contains the class `Timestamp`, which extracts features from timestamps. FEEED focuses and extracts features of the whole log only (e.g., time within the day).
 
-* defining if the proposed feature is log-level, opposed to single event, trace, activity level.
+### Assumptions and conditions
+To include new features in this repo, first consider the following:
+
+* Clarifying whether the proposed feature is on event-log-level instead of a single event, trace, or activity level.
 * Next, check for dependency and Python version compatibility with this current repo (see `setup.py`).
-* The class/method needs to be called by including it in the list of feeed/feature_extractor.py and importing the new method accordingly. Furthermore, the "feature type" needs to be included in the exception of feeed/feature_extractor.py
-* The new "feature type" and its features (i.e. summary obtained by aggregation/statistic functions) need to be included in the README.md table
-* The output of the newFeature class needs to be a dict of the sort: `{"featureType_summary1": value1, "featureType_summary2": value2}`
 
-
-### Example 
-
-As an example for this tutorial, let us we focus on the example of time-based features. The `feeed/time.py` is a script that currently contains the class `Timestamp`, which extracts knowledge from timestamps. In summary, features could be extracted from groups (i.e., cases) or from the whole log (e.g., time within the day).
-
-<!-- Implementing each time-based feature as `@classmethods` within this class allows us to easily scale and manage features. A tiny botleneck is that each class method should accept `**kwargs` regardless of the other arguments (but this can be internaly handled in the future). Each class method is accessed by inspecting the object using `inspect.getmembers`.  -->
-
-All the time features are currently measured in seconds, and they include:
-
-- `execution_time`: execution time of an event w.r.t. to the previous one
-- `accumulated_time`: accumulated time of an event w.r.t. to the first one from a trace
-- `remaining_time`: remaining time of an event w.r.t. to the last one from a trace
-- `within_day`: time within the day 
-
-Essentially, there are methods that accept `group` or `X` as arguments. The former consists of a trace (i.e., grouped by case id) since we evaluate, for instance, the event timestamp with the previous one. The latter consists of the whole event log, since some operations can be performed element-wise (e.g., extracting the weekday from a timestamp column).
+If both conditions apply, move on to implementation.
 
 ### Implementing any `NewFeature` class
+* Include the new module containing the `new_feature` computation in `feeed/`, resulting in `feed/new_feature_type.py` (e.g. `feed/time.py`).
+* Import the new method in `feeed/feature_extractor.py` (e.g. `from .time import time_based`)
+* Ensure output of the `newFeature` class is a dict of the sort: `{"feature_1": value1, "feature_2": value2}`
+* To call the new class and methods, include the new `feature type` in the [list of `feeed/feature_extractor.py`](https://github.com/lmu-dbs/feeed/blob/688cbe290d5c434f98bc9f059da0010f81ec89f1/feeed/feature_extractor.py#L21).
+    * Furthermore, include the `feature type` in the [Exception of `feeed/feature_extractor.py`](https://github.com/lmu-dbs/feeed/blob/688cbe290d5c434f98bc9f059da0010f81ec89f1/feeed/feature_extractor.py#L57) to handle user misspells.
+* Include the new `feature type` (e.g. "time_based") and its `feature`s (e.g. "time_geometric_mean") in the [Feature Type table](#feature-types).
 
 Below, see an example of pseudo code of how to implement a new (generic) feature extraction class:
 
@@ -303,7 +294,7 @@ class NewFeature:
     def bar(cls, **kwargs):
         return kwargs["event_attribute"] + 1
 
-def extract_new_feature():
+def new_feature_type():
     available_class_methods = inspect.getmembers(NewFeature, predicate=inspect.ismethod)
     output = {}
     for feature_name, feature_fn in available_class_methods:
@@ -314,8 +305,10 @@ def extract_new_feature():
 ```
 ### Testing the new implementation
 
-After implementing the new feature and including it in the list of `feeed/feature_extractor.py` and importing the new method accordingly, you can quickly test it by running:
+After implementing the new feature; including it in the list of `feeed/feature_extractor.py` and importing the new method accordingly, you can quickly test it by running the:
 
 ```bash
-python -c "from feeed.feature_extractor import extract_features; print(extract_features('/home/seidi/datasets/logs/sepsis/SEPSIS.xes', ['extract_new_feature']))"
+python -c "from feeed.feature_extractor import extract_features; print(extract_features('test_logs/SEPSIS.xes', ['new_feature_type']))"
 ```
+Finally, consider submitting a pull request to our repository. We are looking forward to your new features!
+

@@ -86,7 +86,7 @@ def meta(time):
         "time_kurtosis": time_kurtosis,
         "time_coefficient_variation": time_coefficient_variation,
         "time_entropy": time_entropy,
-        **{f"time_hist{i}": t for i, t in enumerate(time_hist)},
+        # **{f"time_hist{i}": t for i, t in enumerate(time_hist)},
         "time_skewness_hist": time_skewness_hist,
         "time_kurtosis_hist": time_kurtosis_hist,
     }

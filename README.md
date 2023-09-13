@@ -1,11 +1,13 @@
 # FEEED
 **Fe**ature **E**xtraction for **E**vent **D**ata
+Features extracted by this tool stem from [[2]](#references),[[3]](#references),[[4]](#references),[[5]](#references).
 
 ## Table of Contents
 
 - [Installation](#installation)
 - [Usage](#usage)
 - [Extending Features](#extending-features)
+- [References](#references)
 
 ## Installation
 Requirements:
@@ -47,6 +49,7 @@ Specific features can be selected referring to their feature types:
 | time_based     | time_based_min, time_based_max, time_based_mean, time_based_median, time_based_mode, time_based_std, time_based_variance, time_based_q1, time_based_q3, time_based_iqr, time_based_geometric_mean, time_based_geometric_std, time_based_harmonic_mean, time_based_skewness, time_based_kurtosis, time_based_coefficient_variation, time_based_entropy, time_based_skewness_hist, time_based_kurtosis_hist |
 
 ### Examples
+For the following examples we used Sepsis event data[1].
 #### Example 1:
 Passing sublist of feature_types, e.g. ['start_activities'], to get a list of values for the feature type 'start_activities' only
 ```python
@@ -307,3 +310,10 @@ python -c "from feeed.feature_extractor import extract_features; print(extract_f
 ```
 Finally, consider submitting a pull request to our repository. We are looking forward to your new features! :)
 
+## References
+1. Mannhardt, Felix (2016): Sepsis Cases - Event Log. Version 1. 4TU.ResearchData. dataset. https://doi.org/10.4121/uuid:915d2bfb-7e84-49ad-a286-dc35f063a460
+2. G. M. Tavares, S. Barbon Junior, E. Damiani, and P. Ceravolo, “Selecting optimal trace clustering pipelines with meta-learning,” in Intelligent Systems, J. C. Xavier-Junior and R. A. Rios, Eds. Cham: Springer
+International Publishing, 2022, pp. 150–164.
+3. S. B. Jr., P. Ceravolo, R. S. Oyamada, and G. M. Tavares, “Trace encoding in process mining: a survey and benchmarking,” Engineering Applications of Artificial Intelligence, 2023.
+4. C. O. Back, S. Debois, and T. Slaats, “Entropy as a measure of log variability,” Journal on Data Semantics, vol. 8, no. 2, Jun 2019.
+[5] A. Augusto, J. Mendling, M. Vidgof, and B. Wurm, “The connection between process complexity of event sequences and models discovered by process mining,” Information Sciences, vol. 598, pp. 196–215, 2022.

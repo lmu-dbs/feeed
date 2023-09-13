@@ -1,6 +1,7 @@
 # FEEED
 **Fe**ature **E**xtraction for **E**vent **D**ata
 Features extracted by this tool stem from [[2]](#references),[[3]](#references),[[4]](#references),[[5]](#references).
+A video tutorial on how to use this tool can be found [here](https://www.youtube.com/watch?v=wS6n3ngRRd8).
 
 ## Table of Contents
 

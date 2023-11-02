@@ -318,4 +318,4 @@ Finally, consider submitting a pull request to our repository. We are looking fo
 International Publishing, 2022, pp. 150–164.
 3. S. B. Jr., P. Ceravolo, R. S. Oyamada, and G. M. Tavares, “Trace encoding in process mining: a survey and benchmarking,” Engineering Applications of Artificial Intelligence, 2023.
 4. C. O. Back, S. Debois, and T. Slaats, “Entropy as a measure of log variability,” Journal on Data Semantics, vol. 8, no. 2, Jun 2019.
-[5] A. Augusto, J. Mendling, M. Vidgof, and B. Wurm, “The connection between process complexity of event sequences and models discovered by process mining,” Information Sciences, vol. 598, pp. 196–215, 2022.
+5. A. Augusto, J. Mendling, M. Vidgof, and B. Wurm, “The connection between process complexity of event sequences and models discovered by process mining,” Information Sciences, vol. 598, pp. 196–215, 2022.

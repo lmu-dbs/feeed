@@ -7,6 +7,7 @@ from .end_activities import end_activities
 from .entropies import entropies
 from .complexity import complexity
 from .time import time_based
+from .internal_entropies import internal_entropies
 
 from datetime import datetime as dt
 from pm4py.objects.log.importer.xes import importer as xes_importer
@@ -27,6 +28,7 @@ def extract_features(event_logs_path, feature_types=None):
             "start_activities",
             "end_activities",
             "entropies",
+            "internal_entropies",
             "complexity",
             "time_based",
         ]

@@ -4,13 +4,20 @@ import math
 
 
 def internal_entropies(log):
-    return {
+    results = {
         "trace_entropy": trace_entropies(log),
         "prefix_entropy": prefix_entropy(log),
         "prefix_flattened_entropy": prefix_flattened_entropy(log),
         "global_block_entropy": global_block_entropy(log),
-        "flattened_global_block_entropy": flattened_global_block_entropy(log)
+        "flattened_global_block_entropy": flattened_global_block_entropy(log),
+        "entropy_k_block_ratio_1": entropy_k_block(log, k=1)/1,
+        "entropy_k_block_ratio_3": entropy_k_block(log, k=3)/3,
+        "entropy_k_block_ratio_5": entropy_k_block(log, k=5)/5,
+        "entropy_k_block_diff_1": entropy_k_block(log, k=1) ,
+        "entropy_k_block_diff_3": entropy_k_block(log, k=3) - entropy_k_block(log, k=2),
+        "entropy_k_block_diff_5": entropy_k_block(log, k=5) - entropy_k_block(log, k=4),
     }
+    return results
 
 def trace_entropies(log):
     # Get unique traces and their counts
@@ -80,3 +87,12 @@ def flattened_global_block_entropy(log):
     substring_entropy = sum((count / total_substrings) * math.log2(count / total_substrings) for count in substring_counts.values())
     
     return -substring_entropy
+
+def entropy_k_block(log, k=1):
+    all_k_object_substrings = [trace[i:i + k] for trace in (tuple(event["concept:name"] for event in trace) for trace in log) for i in range(len(trace) - k + 1)]
+    
+    k_sub_counts = Counter(all_k_object_substrings)
+    total_k_substrings = len(all_k_object_substrings)
+
+    k_substring_entropy = sum((count / total_k_substrings) * math.log2(count / total_k_substrings) for count in k_sub_counts.values()) 
+    return -k_substring_entropy

@@ -280,7 +280,11 @@ If both conditions apply, move on to implementation.
     * Furthermore, include the `feature type` in the [Exception of `feeed/feature_extractor.py`](https://github.com/lmu-dbs/feeed/blob/688cbe290d5c434f98bc9f059da0010f81ec89f1/feeed/feature_extractor.py#L57) to handle user misspells.
 * Include the new `feature type` (e.g. "time_based") and its `feature`s (e.g. "time_geometric_mean") in the [Feature Type table](#feature-types).
 
-Below, see an example of pseudo-code of how to implement a new (generic) feature extraction class:
+Below, see an example of pseudo-code of how to implement a new (generic) feature extraction class.
+Note that `cls` is the class object of the form `<class 'feeed.feature_type.NewFeature'>`;
+`**kwargs` points to e.g. log attributes, which can also be replaced by simply `log`, if desired;
+and `summarize()` needs to be implemented depending on the feature level,
+meaning if `arr_values` is on a log level, `summarize` is the identity function:
 
 ```python
 import inspect

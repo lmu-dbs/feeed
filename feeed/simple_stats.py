@@ -1,32 +1,28 @@
 from pm4py.algo.filtering.log.variants import variants_filter
 
-class SimpleStats:
-    def __init__(self, log):
-        self.log = log
-        #print("INIT", self.n_traces(self.log))
+import inspect
 
+class SimpleStats:
     @classmethod
-    def n_traces(self, log):
+    def n_traces(cls, log):
         return len(log)
 
     @classmethod
-    def n_unique_traces(self, log):
+    def n_unique_traces(cls, log):
         variants = variants_filter.get_variants(log)
         return len(variants)
 
     @classmethod
-    def ratio_unique_traces_per_trace(self, log):
+    def ratio_unique_traces_per_trace(cls, log):
         variants = variants_filter.get_variants(log)
+        return len(variants)/len(log)
 
 
 def simple_stats(log):
-    simplestats = SimpleStats(log)
-    print("TEST")
+    available_class_methods = inspect.getmembers(SimpleStats, predicate=inspect.ismethod)
+    output = {}
+    for feature_name, feature_fn in available_class_methods:
+        feature_value = feature_fn(log)
+        output[f"{feature_name}"] = feature_value
 
-    result = {
-            "n_traces": simplestats.n_traces(log),
-            "n_unique_traces": simplestats.n_unique_traces(log),
-            "ratio_unique_traces_per_trace": simplestats.n_unique_traces(log)/ simplestats.n_traces(log)
-            }
-
-    return result
+    return output

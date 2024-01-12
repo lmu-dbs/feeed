@@ -2,7 +2,7 @@ import numpy as np
 from scipy import stats
 
 
-def trace_length(log):
+def trace_length(log, feature_names=None):
     trace_lengths = []
     n_events = 0
     for trace in log:

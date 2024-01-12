@@ -4,7 +4,7 @@ from pm4py.algo.filtering.log.start_activities import start_activities_filter
 import pm4py
 
 
-def start_activities(log):
+def start_activities(log, feature_names=None):
     log_start = start_activities_filter.get_start_activities(
         pm4py.filter_event_attribute_values(
             log, "concept:name", ["START"], level="event", retain=False

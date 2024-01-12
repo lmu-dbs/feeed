@@ -3,7 +3,7 @@ from scipy import stats
 from pm4py.statistics.traces.generic.log import case_statistics
 
 
-def trace_variant(log):
+def trace_variant(log, feature_names=None):
     variants_count = case_statistics.get_variant_statistics(log)
     variants_count = sorted(variants_count, key=lambda x: x["count"], reverse=True)
     occurrences = [x["count"] for x in variants_count]

@@ -7,7 +7,7 @@ from .end_activities import end_activities
 from .entropies import entropies
 from .complexity import complexity
 from .time import time_based
-from .feature_mapping import mapping
+from .type import feature_type
 
 from datetime import datetime as dt
 from pm4py.objects.log.importer.xes import importer as xes_importer
@@ -35,33 +35,25 @@ def extract_features(event_logs_path, feature_types=None):
     features = {"log": log_name.split(".xes")[0]}
     start_log = dt.now()
 
-    if True:
-        for i, ft_name in enumerate(feature_types):
-            start_feat = dt.now()
-            ft_type = mapping(ft_name)
-            if ft_type == ft_name:
-                ft_name = None
+    for i, ft_name in enumerate(feature_types):
+        start_feat = dt.now()
+        ft_type = feature_type(ft_name)
+        info_prefix =  f"     INFO: {log_name} starting at {len(features)}, {ft_name} from {ft_type} took "
+        if ft_type == ft_name:
+            ft_name = None
 
-            print("INFO: Mapped", ft_name, "to", mapping(ft_type))
-            if ft_type == "entropies" or ft_type == "complexity":
-                feature_values = eval(f"{ft_type}(event_logs_path)")
-            else:
-                feature_values = eval(f"{ft_type}(log)")#Insert second argument
-            features = {**features, **feature_values}
+        if ft_type == "entropies" or ft_type == "complexity":
+            feature_values = eval(f"{ft_type}(event_logs_path)")
+        else:
+            feature_values = eval(f"{ft_type}(log, feature_names=['{ft_name}'])")
+        features = {**features, **feature_values}
 
-            log_info = f"     INFO: {log_name} {len(features)-1} {ft_type} took {dt.now()-start_feat} sec, "
-            if i == len(feature_types) - 1:
-                print(log_info + "last feature.")
-            else:
-                print(log_info + f"next {feature_types[(i+1)%len(feature_types)]}...")
-        print(
-            f"SUCCESSFULLY: {len(features)} features for {log_name} took {dt.now() - start_log} sec."
-        )
-    """
-    except (NameError, TypeError):
-        print(f"Invalid value for feature_types argument. Use a sublist of the following:"
-              "\n['simple_stats', 'trace_length', 'trace_variant', 'activities', 'start_activities', 'end_activities',",
-              " 'entropies', 'complexity', 'time_based] or None")
-    """
-
+        log_info = info_prefix+f"{dt.now()-start_feat} sec, "
+        if i == len(feature_types) - 1:
+            print(log_info + "last feature.")
+        else:
+            print(log_info + f"next {feature_types[(i+1)%len(feature_types)]}...")
+    print(
+        f"SUCCESSFULLY: {len(features)} features for {log_name} took {dt.now() - start_log} sec."
+    )
     return features

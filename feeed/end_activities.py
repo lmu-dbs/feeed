@@ -4,7 +4,7 @@ from pm4py.algo.filtering.log.end_activities import end_activities_filter
 import pm4py
 
 
-def end_activities(log):
+def end_activities(log, feature_names=None):
     log_end = end_activities_filter.get_end_activities(
         pm4py.filter_event_attribute_values(
             log, "concept:name", ["END"], level="event", retain=False

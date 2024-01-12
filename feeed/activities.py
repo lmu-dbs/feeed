@@ -3,7 +3,7 @@ from scipy import stats
 from pm4py.algo.filtering.log.attributes import attributes_filter
 
 
-def activities(log):
+def activities(log, feature_names=None):
     activities = attributes_filter.get_attribute_values(log, "concept:name")
     n_unique_activities = len(activities)
 

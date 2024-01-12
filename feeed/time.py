@@ -107,7 +107,7 @@ def meta(time):
         "time_kurtosis_hist": time_kurtosis_hist,
     }
 
-def time_based(log):
+def time_based(log, feature_names=None):
     # if has_pandarallel:
     #     # parallelizes pandas apply
     #     pandarallel.initialize(nb_workers=min(os.cpu_count(), 20))

@@ -1,8 +1,48 @@
 import inspect
 import numpy as np
+
+from .feature import Feature
 from scipy import stats
 
-class TraceLength:
+class TraceLength(Feature):
+    def __init__(self, feature_names='trace_length'):
+        self.feature_type='trace_length'
+        self.available_class_methods = dict(inspect.getmembers(TraceLength, predicate=inspect.ismethod))
+        if self.feature_type in feature_names:
+            feature_names = [
+                    'trace_len_min',
+                    'trace_len_max',
+                    'trace_len_mean',
+                    'trace_len_median',
+                    'trace_len_mode',
+                    'trace_len_std',
+                    'trace_len_variance',
+                    'trace_len_q1',
+                    'trace_len_q3',
+                    'trace_len_iqr',
+                    'trace_len_geometric_mean',
+                    'trace_len_geometric_std',
+                    'trace_len_harmonic_mean',
+                    'trace_len_skewness',
+                    'trace_len_kurtosis',
+                    'trace_len_coefficient_variation',
+                    'trace_len_entropy',
+                    'trace_len_hist1',
+                    'trace_len_hist2',
+                    'trace_len_hist3',
+                    'trace_len_hist4',
+                    'trace_len_hist5',
+                    'trace_len_hist6',
+                    'trace_len_hist7',
+                    'trace_len_hist8',
+                    'trace_len_hist9',
+                    'trace_len_hist10',
+                    'trace_len_skewness_hist',
+                    'trace_len_kurtosis_hist'
+                    ]
+        else:
+            self.feature_names = feature_names
+
     def trace_lengths(log):
         trace_lengths = []
         n_events = 0
@@ -115,46 +155,3 @@ class TraceLength:
     def trace_len_kurtosis_hist(cls, log):
         trace_len_hist = TraceLength.trace_len_hist(log)
         return stats.kurtosis(trace_len_hist)
-
-def trace_length(log, feature_names=None):
-    if feature_names is None:
-        feature_names = [
-                'trace_len_min',
-                'trace_len_max',
-                'trace_len_mean',
-                'trace_len_median',
-                'trace_len_mode',
-                'trace_len_std',
-                'trace_len_variance',
-                'trace_len_q1',
-                'trace_len_q3',
-                'trace_len_iqr',
-                'trace_len_geometric_mean',
-                'trace_len_geometric_std',
-                'trace_len_harmonic_mean',
-                'trace_len_skewness',
-                'trace_len_kurtosis',
-                'trace_len_coefficient_variation',
-                'trace_len_entropy',
-                'trace_len_hist1',
-                'trace_len_hist2',
-                'trace_len_hist3',
-                'trace_len_hist4',
-                'trace_len_hist5',
-                'trace_len_hist6',
-                'trace_len_hist7',
-                'trace_len_hist8',
-                'trace_len_hist9',
-                'trace_len_hist10',
-                'trace_len_skewness_hist',
-                'trace_len_kurtosis_hist'
-                ]
-    available_class_methods = dict(inspect.getmembers(TraceLength, predicate=inspect.ismethod))
-
-    output = {}
-    for feature_name in feature_names:
-        feature_fn = available_class_methods[feature_name]
-        feature_value = feature_fn(log)
-        output[f"{feature_name}"] = feature_value
-
-    return output

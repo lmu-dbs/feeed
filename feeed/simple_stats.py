@@ -18,10 +18,18 @@ class SimpleStats:
         return len(variants)/len(log)
 
 
-def simple_stats(log):
-    available_class_methods = inspect.getmembers(SimpleStats, predicate=inspect.ismethod)
+def simple_stats(log, feature_names=None):
+    if feature_names is None:
+        feature_names = [
+                "n_traces",
+                "n_unique_traces",
+                "ratio_unique_traces_per_trace"
+                ]
+
+    available_class_methods = dict(inspect.getmembers(SimpleStats, predicate=inspect.ismethod))
     output = {}
-    for feature_name, feature_fn in available_class_methods:
+    for feature_name in feature_names:
+        feature_fn = available_class_methods[feature_name]
         feature_value = feature_fn(log)
         output[f"{feature_name}"] = feature_value
 

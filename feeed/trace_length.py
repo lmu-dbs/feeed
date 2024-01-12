@@ -20,7 +20,10 @@ def trace_length(log):
     trace_len_q3 = np.percentile(trace_lengths, 75)
     trace_len_iqr = stats.iqr(trace_lengths)
     trace_len_geometric_mean = stats.gmean(trace_lengths)
-    trace_len_geometric_std = stats.gstd(trace_lengths)
+    try:
+        trace_len_geometric_std = stats.gstd(trace_lengths)
+    except:
+        trace_len_geometric_std=stats.gstd([i for idx, i in enumerate(trace_lengths) if trace_lengths[idx] != 0])
     trace_len_harmonic_mean = stats.hmean(trace_lengths)
     trace_len_skewness = stats.skew(trace_lengths)
     trace_len_kurtosis = stats.kurtosis(trace_lengths)

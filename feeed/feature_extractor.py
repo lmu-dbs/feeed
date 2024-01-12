@@ -1,6 +1,6 @@
 from .simple_stats import SimpleStats as simple_stats
 from .trace_length import TraceLength as trace_length
-from .trace_variant import trace_variant
+from .trace_variant import TraceVariant as trace_variant
 from .activities import activities
 from .start_activities import start_activities
 from .end_activities import end_activities
@@ -25,7 +25,7 @@ def feature_type(feature_name):
         ]
 
     for feature_type in feature_types:
-        if feature_type == 'simple_stats' or feature_type == 'trace_length':
+        if feature_type == 'simple_stats' or feature_type == 'trace_length' or feature_type == 'trace_variant':
             available_features = [*eval(feature_type)().available_class_methods]
         else:
             available_features = []

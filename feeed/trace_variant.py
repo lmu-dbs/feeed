@@ -1,38 +1,91 @@
+import inspect
 import numpy as np
+
+from .feature import Feature
 from scipy import stats
 from pm4py.statistics.traces.generic.log import case_statistics
 
+class TraceVariant(Feature):
+    def __init__(self, feature_names='trace_variant'):
+        self.feature_type = "trace_variant"
+        self.available_class_methods = dict(inspect.getmembers(TraceVariant, predicate=inspect.ismethod))
+        if self.feature_type in feature_names:
+            self.feature_names = [
+                    "ratio_most_common_variant",
+                    "ratio_top_1_variants",
+                    "ratio_top_5_variants",
+                    "ratio_top_10_variants",
+                    "ratio_top_20_variants",
+                    "ratio_top_50_variants",
+                    "ratio_top_75_variants",
+                    "mean_variant_occurrence",
+                    "std_variant_occurrence",
+                    "skewness_variant_occurrence",
+                    "kurtosis_variant_occurrence"
+                    ]
+        else:
+            self.feature_names = feature_names
 
-def trace_variant(log, feature_names=None):
-    variants_count = case_statistics.get_variant_statistics(log)
-    variants_count = sorted(variants_count, key=lambda x: x["count"], reverse=True)
-    occurrences = [x["count"] for x in variants_count]
+    def occurrences(log):
+        variants_count = case_statistics.get_variant_statistics(log)
+        variants_count = sorted(variants_count, key=lambda x: x["count"], reverse=True)
+        result = [x["count"] for x in variants_count]
 
-    len_occurr, len_log = len(occurrences), len(log)
+        return result
 
-    ratio_most_common_variant = sum(occurrences[:1]) / len(log)
-    ratio_top_1_variants = sum(occurrences[: int(len_occurr * 0.01)]) / len_log
-    ratio_top_5_variants = sum(occurrences[: int(len_occurr * 0.05)]) / len_log
-    ratio_top_10_variants = sum(occurrences[: int(len_occurr * 0.1)]) / len_log
-    ratio_top_20_variants = sum(occurrences[: int(len_occurr * 0.2)]) / len_log
-    ratio_top_50_variants = sum(occurrences[: int(len_occurr * 0.5)]) / len_log
-    ratio_top_75_variants = sum(occurrences[: int(len_occurr * 0.75)]) / len_log
-    mean_variant_occurrence = np.mean(occurrences)
-    std_variant_occurrence = np.std(occurrences)
-    skewness_variant_occurrence = stats.skew(occurrences)
-    kurtosis_variant_occurrence = stats.kurtosis(occurrences)
+    @classmethod
+    def ratio_most_common_variant(cls, log):
+        occurrences = TraceVariant.occurrences(log)
+        return sum(occurrences[:1]) / len(log)
 
-    results = {
-            "ratio_most_common_variant": ratio_most_common_variant,
-            "ratio_top_1_variants": ratio_top_1_variants,
-            "ratio_top_5_variants": ratio_top_5_variants,
-            "ratio_top_10_variants": ratio_top_10_variants,
-            "ratio_top_20_variants": ratio_top_20_variants,
-            "ratio_top_50_variants": ratio_top_50_variants,
-            "ratio_top_75_variants": ratio_top_75_variants,
-            "mean_variant_occurrence": mean_variant_occurrence,
-            "std_variant_occurrence": std_variant_occurrence,
-            "skewness_variant_occurrence": skewness_variant_occurrence,
-            "kurtosis_variant_occurrence": kurtosis_variant_occurrence
-                }
-    return results
+    @classmethod
+    def ratio_top_1_variants(cls, log):
+        occurrences = TraceVariant.occurrences(log)
+        return sum(occurrences[: int(len(occurrences) * 0.01)]) / len(log)
+
+    @classmethod
+    def ratio_top_5_variants(cls, log):
+        occurrences = TraceVariant.occurrences(log)
+        return sum(occurrences[: int(len(occurrences) * 0.05)]) / len(log)
+
+    @classmethod
+    def ratio_top_10_variants(cls, log):
+        occurrences = TraceVariant.occurrences(log)
+        return sum(occurrences[: int(len(occurrences) * 0.1)]) / len(log)
+
+    @classmethod
+    def ratio_top_20_variants(cls, log):
+        occurrences = TraceVariant.occurrences(log)
+        return sum(occurrences[: int(len(occurrences) * 0.2)]) / len(log)
+
+    @classmethod
+    def ratio_top_50_variants(cls, log):
+        occurrences = TraceVariant.occurrences(log)
+        return sum(occurrences[: int(len(occurrences) * 0.5)]) / len(log)
+
+    @classmethod
+    def ratio_top_75_variants(cls, log):
+        occurrences = TraceVariant.occurrences(log)
+        return sum(occurrences[: int(len(occurrences) * 0.75)]) / len(log)
+
+    @classmethod
+    def mean_variant_occurrence(cls, log):
+        occurrences = TraceVariant.occurrences(log)
+        return np.mean(occurrences)
+
+    @classmethod
+    def std_variant_occurrence(cls, log):
+        occurrences = TraceVariant.occurrences(log)
+        return np.std(occurrences)
+
+    @classmethod
+    def skewness_variant_occurrence(cls, log):
+        occurrences = TraceVariant.occurrences(log)
+        return stats.skew(occurrences)
+
+    @classmethod
+    def kurtosis_variant_occurrence(cls, log):
+        occurrences = TraceVariant.occurrences(log)
+        return stats.kurtosis(occurrences)
+
+

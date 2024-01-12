@@ -43,7 +43,7 @@ def extract_features(event_logs_path, feature_types=None):
             ft_name = None
 
         if ft_type == "entropies" or ft_type == "complexity":
-            feature_values = eval(f"{ft_type}(event_logs_path)")
+            feature_values = eval(f"{ft_type}(event_logs_path)")#Add feature_names parameter here and default in fnc
         else:
             feature_values = eval(f"{ft_type}(log, feature_names=['{ft_name}'])")
         features = {**features, **feature_values}

@@ -260,7 +260,7 @@ outputs
 ```
 
 ## Extending Features
-This tutorial is for extending this tool to include additional features (e.g. time-based). As an example for this tutorial, we focus on the example of time-based features. The `feeed/time.py` script contains the class `Timestamp`, which extracts features from timestamps. FEEED focuses and extracts features of the whole log only (e.g., time within the day).
+This tutorial is for extending this tool to include additional features (e.g. time-based). As an example for this tutorial, we focus on the example of time-based features. The `feeed/time.py` script contains the class `TimeBased`, which extracts features from timestamps. FEEED focuses and extracts features of the whole log only (e.g., time within the day).
 
 ### Assumptions and conditions
 To include new features in this repo, first consider the following:
@@ -273,7 +273,7 @@ If both conditions apply, move on to implementation.
 ### Implementing any `NewFeature` class
 * Clone this repo to your local machine using `git clone git@github.com:lmu-dbs/feeed.git`
 * Include the new module containing the `new_feature` computation in `feeed/`, resulting in `feed/new_feature_type.py` (e.g. `feed/time.py`).
-* Import the new method in `feeed/feature_extractor.py` (e.g. `from .time import time_based`)
+* Import the new method in `feeed/feature_extractor.py` (e.g. `from .time import TimeBased as time_based`)
    * Ensure output of the `NewFeature` class is a dict of the sort: `{"feature_1": value1, "feature_2": value2}`.
    * Input for `NewFeature` should support event-logs, as in [pm4py](https://pm4py.fit.fraunhofer.de/static/assets/api/2.7.5.1/api.html#input-pm4py-read).
 * To call the new class and methods, include the new `feature type` in the [list of `feeed/feature_extractor.py`](https://github.com/lmu-dbs/feeed/blob/688cbe290d5c434f98bc9f059da0010f81ec89f1/feeed/feature_extractor.py#L21).

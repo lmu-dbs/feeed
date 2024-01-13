@@ -6,7 +6,7 @@ from .start_activities import StartActivities as start_activities
 from .end_activities import EndActivities as end_activities
 from .entropies import entropies
 from .complexity import complexity
-from .time import time_based
+from .time import TimeBased as time_based
 
 from datetime import datetime as dt
 from pm4py.objects.log.importer.xes import importer as xes_importer
@@ -25,7 +25,9 @@ def feature_type(feature_name):
         ]
 
     single_selection_features = ['simple_stats', 'trace_length','trace_variant',
-                                 'activities', 'start_activities', 'end_activities']
+                                 'activities', 'start_activities', 'end_activities',
+                                 'time_based']
+
     for feature_type in feature_types:
         if feature_type in single_selection_features:
             available_features = [*eval(feature_type)().available_class_methods]

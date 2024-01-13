@@ -6,10 +6,10 @@ from scipy import stats
 
 class TraceLength(Feature):
     def __init__(self, feature_names='trace_length'):
-        self.feature_type='trace_length'
+        self.feature_type="trace_length"
         self.available_class_methods = dict(inspect.getmembers(TraceLength, predicate=inspect.ismethod))
         if self.feature_type in feature_names:
-            feature_names = [
+            self.feature_names = [
                     'trace_len_min',
                     'trace_len_max',
                     'trace_len_mean',
@@ -145,6 +145,55 @@ class TraceLength(Feature):
         trace_lengths = TraceLength.trace_lengths(log)
         return stats.entropy(trace_lengths)
 
+    @classmethod
+    def trace_len_hist1(cls, log):
+        trace_len_hist = TraceLength.trace_len_hist(log)
+        return trace_len_hist[0]
+
+    @classmethod
+    def trace_len_hist2(cls, log):
+        trace_len_hist = TraceLength.trace_len_hist(log)
+        return trace_len_hist[1]
+
+    @classmethod
+    def trace_len_hist3(cls, log):
+        trace_len_hist = TraceLength.trace_len_hist(log)
+        return trace_len_hist[2]
+
+    @classmethod
+    def trace_len_hist4(cls, log):
+        trace_len_hist = TraceLength.trace_len_hist(log)
+        return trace_len_hist[3]
+
+    @classmethod
+    def trace_len_hist5(cls, log):
+        trace_len_hist = TraceLength.trace_len_hist(log)
+        return trace_len_hist[4]
+
+    @classmethod
+    def trace_len_hist6(cls, log):
+        trace_len_hist = TraceLength.trace_len_hist(log)
+        return trace_len_hist[5]
+
+    @classmethod
+    def trace_len_hist7(cls, log):
+        trace_len_hist = TraceLength.trace_len_hist(log)
+        return trace_len_hist[6]
+
+    @classmethod
+    def trace_len_hist8(cls, log):
+        trace_len_hist = TraceLength.trace_len_hist(log)
+        return trace_len_hist[7]
+
+    @classmethod
+    def trace_len_hist9(cls, log):
+        trace_len_hist = TraceLength.trace_len_hist(log)
+        return trace_len_hist[8]
+
+    @classmethod
+    def trace_len_hist10(cls, log):
+        trace_len_hist = TraceLength.trace_len_hist(log)
+        return trace_len_hist[9]
 
     @classmethod
     def trace_len_skewness_hist(cls, log):

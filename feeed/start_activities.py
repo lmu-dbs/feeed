@@ -1,43 +1,103 @@
+import inspect
 import numpy as np
-from scipy import stats
-from pm4py.algo.filtering.log.start_activities import start_activities_filter
 import pm4py
 
+from .feature import Feature
+from scipy import stats
+from pm4py.algo.filtering.log.start_activities import start_activities_filter
 
-def start_activities(log, feature_names=None):
-    log_start = start_activities_filter.get_start_activities(
-        pm4py.filter_event_attribute_values(
-            log, "concept:name", ["START"], level="event", retain=False
+class StartActivities(Feature):
+    def __init__(self, feature_names='start_activities'):
+        self.feature_type="start_activities"
+        self.available_class_methods = dict(inspect.getmembers(StartActivities, predicate=inspect.ismethod))
+        if self.feature_type in feature_names:
+            self.feature_names = [
+                "n_unique_start_activities",
+                "start_activities_min",
+                "start_activities_max",
+                "start_activities_mean",
+                "start_activities_median",
+                "start_activities_std",
+                "start_activities_variance",
+                "start_activities_q1",
+                "start_activities_q3",
+                "start_activities_iqr",
+                "start_activities_skewness",
+                "start_activities_kurtosis"
+                ]
+        else:
+            self.feature_names = feature_names
+
+    def log_start(log):
+        log_start = start_activities_filter.get_start_activities(
+            pm4py.filter_event_attribute_values(
+                log, "concept:name", ["START"], level="event", retain=False
+            )
         )
-    )
-    # log_start = start_activities_filter.get_start_activities(log)
-    n_unique_start_activities = len(log_start)
+        # log_start = start_activities_filter.get_start_activities(log)
+        return log_start
 
-    start_activities_occurrences = list(log_start.values())
-    start_activities_min = np.min(start_activities_occurrences)
-    start_activities_max = np.max(start_activities_occurrences)
-    start_activities_mean = np.mean(start_activities_occurrences)
-    start_activities_median = np.median(start_activities_occurrences)
-    start_activities_std = np.std(start_activities_occurrences)
-    start_activities_variance = np.var(start_activities_occurrences)
-    start_activities_q1 = np.percentile(start_activities_occurrences, 25)
-    start_activities_q3 = np.percentile(start_activities_occurrences, 75)
-    start_activities_iqr = stats.iqr(start_activities_occurrences)
-    start_activities_skewness = stats.skew(start_activities_occurrences)
-    start_activities_kurtosis = stats.kurtosis(start_activities_occurrences)
+    def start_activities_occurrences(log):
+        log_start = StartActivities.log_start(log)
+        start_activities_occurrences = list(log_start.values())
+        return start_activities_occurrences
 
-    results = {
-			"n_unique_start_activities": n_unique_start_activities,
-			"start_activities_min": start_activities_min,
-			"start_activities_max": start_activities_max,
-			"start_activities_mean": start_activities_mean,
-			"start_activities_median": start_activities_median,
-			"start_activities_std": start_activities_std,
-			"start_activities_variance": start_activities_variance,
-			"start_activities_q1": start_activities_q1,
-			"start_activities_q3": start_activities_q3,
-			"start_activities_iqr": start_activities_iqr,
-			"start_activities_skewness": start_activities_skewness,
-			"start_activities_kurtosis": start_activities_kurtosis,
-            }
-    return results
+    @classmethod
+    def n_unique_start_activities(cls, log):
+        log_start = StartActivities.log_start(log)
+        return len(log_start)
+
+    @classmethod
+    def start_activities_min(cls, log):
+        start_activities_occurrences = StartActivities.start_activities_occurrences(log)
+        return np.min(start_activities_occurrences)
+
+    @classmethod
+    def start_activities_max(cls, log):
+        start_activities_occurrences = StartActivities.start_activities_occurrences(log)
+        return np.max(start_activities_occurrences)
+
+    @classmethod
+    def start_activities_mean(cls, log):
+        start_activities_occurrences = StartActivities.start_activities_occurrences(log)
+        return np.mean(start_activities_occurrences)
+
+    @classmethod
+    def start_activities_median(cls, log):
+        start_activities_occurrences = StartActivities.start_activities_occurrences(log)
+        return np.median(start_activities_occurrences)
+
+    @classmethod
+    def start_activities_std(cls, log):
+        start_activities_occurrences = StartActivities.start_activities_occurrences(log)
+        return np.std(start_activities_occurrences)
+
+    @classmethod
+    def start_activities_variance(cls, log):
+        start_activities_occurrences = StartActivities.start_activities_occurrences(log)
+        return np.var(start_activities_occurrences)
+
+    @classmethod
+    def start_activities_q1(cls, log):
+        start_activities_occurrences = StartActivities.start_activities_occurrences(log)
+        return np.percentile(start_activities_occurrences, 25)
+
+    @classmethod
+    def start_activities_q3(cls, log):
+        start_activities_occurrences = StartActivities.start_activities_occurrences(log)
+        return np.percentile(start_activities_occurrences, 75)
+
+    @classmethod
+    def start_activities_iqr(cls, log):
+        start_activities_occurrences = StartActivities.start_activities_occurrences(log)
+        return stats.iqr(start_activities_occurrences)
+
+    @classmethod
+    def start_activities_skewness(cls, log):
+        start_activities_occurrences = StartActivities.start_activities_occurrences(log)
+        return stats.skew(start_activities_occurrences)
+
+    @classmethod
+    def start_activities_kurtosis(cls, log):
+        start_activities_occurrences = StartActivities.start_activities_occurrences(log)
+        return stats.kurtosis(start_activities_occurrences)

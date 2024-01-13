@@ -3,8 +3,8 @@ import numpy as np
 import pm4py
 
 from .feature import Feature
-from scipy import stats
 from pm4py.algo.filtering.log.start_activities import start_activities_filter
+from scipy import stats
 
 class StartActivities(Feature):
     def __init__(self, feature_names='start_activities'):

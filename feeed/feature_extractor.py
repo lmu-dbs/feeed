@@ -3,7 +3,7 @@ from .trace_length import TraceLength as trace_length
 from .trace_variant import TraceVariant as trace_variant
 from .activities import Activities as activities
 from .start_activities import StartActivities as start_activities
-from .end_activities import end_activities
+from .end_activities import EndActivities as end_activities
 from .entropies import entropies
 from .complexity import complexity
 from .time import time_based
@@ -24,8 +24,10 @@ def feature_type(feature_name):
             "time_based",
         ]
 
+    single_selection_features = ['simple_stats', 'trace_length','trace_variant',
+                                 'activities', 'start_activities', 'end_activities']
     for feature_type in feature_types:
-        if feature_type in ['simple_stats', 'trace_length','trace_variant','activities', 'start_activities']:
+        if feature_type in single_selection_features:
             available_features = [*eval(feature_type)().available_class_methods]
         else:
             available_features = []

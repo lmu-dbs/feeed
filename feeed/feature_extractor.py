@@ -4,8 +4,8 @@ from .trace_variant import TraceVariant as trace_variant
 from .activities import Activities as activities
 from .start_activities import StartActivities as start_activities
 from .end_activities import EndActivities as end_activities
-from .entropies import entropies
-from .complexity import complexity
+from .entropies import Entropies as entropies
+from .complexity import Complexity as complexity
 from .time import TimeBased as time_based
 
 from datetime import datetime as dt
@@ -26,7 +26,7 @@ def feature_type(feature_name):
 
     single_selection_features = ['simple_stats', 'trace_length','trace_variant',
                                  'activities', 'start_activities', 'end_activities',
-                                 'time_based']
+                                 'entropies', 'complexity', 'time_based']
 
     for feature_type in feature_types:
         if feature_type in single_selection_features:
@@ -38,7 +38,7 @@ def feature_type(feature_name):
             return feature_type
     raise ValueError(f"ERROR: Invalid value for feature_key argument: {feature_name}. See README.md for supported feature_names or  Use a sublist of the following:"
             "\n['simple_stats', 'trace_length', 'trace_variant', 'activities', 'start_activities', 'end_activities',",
-            " 'entropies', 'complexity', 'time_based] or None")
+            "\n'entropies', 'complexity', 'time_based] or None")
 
 def extract_features(event_logs_path, feature_types=None):
     log_name = event_logs_path.rsplit("/", 1)[-1]
@@ -67,7 +67,7 @@ def extract_features(event_logs_path, feature_types=None):
         ft_type = feature_type(ft_name)
 
         if ft_type == "entropies" or ft_type == "complexity":
-            feature_values = eval(f"{ft_type}(event_logs_path)")#Add feature_names parameter here and default in fnc
+            feature_values = eval(f"{ft_type}(feature_names =['{ft_name}']).extract(event_logs_path)")
         else:
             feature_values = eval(f"{ft_type}(feature_names=['{ft_name}']).extract(log)")
         features = {**features, **feature_values}

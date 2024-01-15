@@ -295,7 +295,9 @@ If both conditions apply, move on to implementation.
    * Input for `NewFeatures` should support event-logs, as in [pm4py](https://pm4py.fit.fraunhofer.de/static/assets/api/2.7.5.1/api.html#input-pm4py-read).
    * Ensure output of the `NewFeatures` class is a dict of the sort: `{"feature_name_1": value1, "feature_name_2": value2}`.
 * To call the new class and methods, include the new `feature_type` (e.g. "time_based") in the [list of `feeed/feature_extractor.py`](https://github.com/lmu-dbs/feeed/blob/688cbe290d5c434f98bc9f059da0010f81ec89f1/feeed/feature_extractor.py#L21).
-    * Furthermore, include the `feature_type` in the [Exception of `feeed/feature_extractor.py`](https://github.com/lmu-dbs/feeed/blob/688cbe290d5c434f98bc9f059da0010f81ec89f1/feeed/feature_extractor.py#L57) to handle user misspells.
+    * Include the `feature_type` in
+        * [feature_type](https://github.com/lmu-dbs/feeed/blob/53d2473509d5eccb9126b7d7bd8487132afd2eb7/feeed/feature_extractor.py#L14)
+        * [extract_feature](https://github.com/lmu-dbs/feeed/blob/53d2473509d5eccb9126b7d7bd8487132afd2eb7/feeed/feature_extractor.py#L43)
 * Include the new `feature type` (e.g. "time_based") and its `feature_names`s (e.g. "time_geometric_mean") in the [Feature Type table](#feature-types).
 
 Below, see an example of pseudo-code of how to implement a new (generic) feature extraction class.
@@ -306,6 +308,8 @@ meaning if `arr_values` is on a log level, `summarize` is the identity function:
 
 ```python
 import inspect
+
+from .feature import Feature
 
 class NewFeatures(Feature):
     def __init__(self, feature_names='feature_type'):

@@ -26,7 +26,7 @@ python -c "from feeed.feature_extractor import extract_features; print(extract_f
 ```
 
 ## Usage
-Output data contains at least one `feature` with `feature_name` and a corresponding value obtained by that feature's specific computation. The schema looks like this:
+Output data contains at least one feature with a `feature_name` and a corresponding value obtained by that feature's specific computation. The schema looks like this:
 ```python
 {
 'log': 'Sepsis'
@@ -48,7 +48,7 @@ Specific `feature_name`s and `feature_type`s can be selected as in the examples 
 | end_activities   | n_unique_end_activities, end_activities_min, end_activities_max, end_activities_mean, end_activities_median, end_activities_std, end_activities_variance, end_activities_q1, end_activities_q3, end_activities_iqr, end_activities_skewness, end_activities_kurtosis                                                                                                                                                                                                                                                                                              |
 | entropies        | entropy_trace, entropy_prefix, entropy_global_block, entropy_lempel_ziv, entropy_k_block_diff_1, entropy_k_block_diff_3, entropy_k_block_diff_5, entropy_k_block_ratio_1, entropy_k_block_ratio_3, entropy_k_block_ratio_5, entropy_knn_3, entropy_knn_5, entropy_knn_7                                                                                                                                                                                                                                                                                           |
 | complexity       | variant_entropy, normalized_variant_entropy, sequence_entropy, normalized_sequence_entropy, sequence_entropy_linear_forgetting, normalized_sequence_entropy_linear_forgetting, sequence_entropy_exponential_forgetting, normalized_sequence_entropy_exponential_forgetting
-| time_based       | accumulated_time, execution_time, remaining_time, waiting_time (with each: min, max, mean, median, mode, std, variance, q1, q3, iqr, geometric_mean, geometric_std, harmonic_mean, skewness, kurtosis, coefficient_variation, entropy, skewness_hist, kurtosis_hist resulting in e.g. accumulated_time_based_min)|
+| time_based       | accumulated_time, execution_time, remaining_time, waiting_time (with each: min, max, mean, median, mode, std, variance, q1, q3, iqr, geometric_mean, geometric_std, harmonic_mean, skewness, kurtosis, coefficient_variation, entropy, skewness_hist, kurtosis_hist resulting in e.g. accumulated_time_min)|
 
 ### Examples
 For the following examples we used Sepsis event data[1].
@@ -116,7 +116,7 @@ If both conditions apply, move on to implementation.
 * Include the new `new_feature_type` (e.g. "time_based") and its `feature_names`s (e.g. "accumulated_time_geometric_mean") in the [Feature Type table](#feature-types).
 
 Below, see an example of pseudo-code of how to implement a new (generic) feature extraction class.
-Note that `cls` is the class object of the form `<class 'feeed.nwe_feature_type.NewFeatures>`;
+Note that `cls` is the class object of the form `<class 'feeed.new_feature_type.NewFeatures>`;
 `**kwargs` points to e.g. log attributes, which can also be replaced by simply `log`, if desired;
 and `summarize()` needs to be implemented depending on the feature level,
 meaning if `arr_values` is on a log level, `summarize` is the identity function:

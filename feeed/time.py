@@ -25,33 +25,7 @@ class TimeBased(Feature):
         self.feature_type="time_based"
         self.available_class_methods = dict(inspect.getmembers(TimeBased, predicate=inspect.ismethod))
         if self.feature_type in feature_names:
-            self.feature_names = ['accumulated_time','execution_time','remaining_time','within_day']
-            """
-            time_feature_names = [
-                    "time_min",
-                    "time_max",
-                    "time_mean",
-                    "time_median",
-                    "time_mode",
-                    "time_std",
-                    "time_variance",
-                    "time_q1",
-                    "time_q3",
-                    "time_iqr",
-                    "time_geometric_mean",
-                    "time_geometric_std",
-                    "time_harmonic_mean",
-                    "time_skewness",
-                    "time_kurtosis",
-                    "time_coefficient_variation",
-                    "time_entropy",
-                    # **{f"time_hist{i}",
-                    "time_skewness_hist",
-                    "time_kurtosis_hist"
-                    ]
-            for prefix in ['accumulated_time','execution_time','remaining_time','within_day']:
-                self.feature_names += [prefix+"_"time_ft for time_ft in time_feature_names]
-            """
+            self.feature_names = [*self.available_class_methods.keys()]
         else:
             self.feature_names = feature_names
 
@@ -90,7 +64,7 @@ class TimeBased(Feature):
         log[feature_name] = feature_values
         time_features = log[[feature_name]].apply(lambda x: meta(x))
         time_features = time_features.to_dict()
-        result = {f"{feature_name.split('_time')[0]}_{k}": v for k,v in time_features[feature_name].items()}
+        result = {f"{feature_name}_{k}": v for k,v in time_features[feature_name].items()}
         return result
 
     """
@@ -145,25 +119,25 @@ def meta(time):
     time_kurtosis_hist = stats.kurtosis(time_hist)
 
     return {
-        "time_min": time_min,
-        "time_max": time_max,
-        "time_mean": time_mean,
-        "time_median": time_median,
-        "time_mode": time_mode,
-        "time_std": time_std,
-        "time_variance": time_variance,
-        "time_q1": time_q1,
-        "time_q3": time_q3,
-        "time_iqr": time_iqr,
-        "time_geometric_mean": time_geometric_mean,
-        "time_geometric_std": time_geometric_std,
-        "time_harmonic_mean": time_harmonic_mean,
-        "time_skewness": time_skewness,
-        "time_kurtosis": time_kurtosis,
-        "time_coefficient_variation": time_coefficient_variation,
-        "time_entropy": time_entropy,
+        "min": time_min,
+        "max": time_max,
+        "mean": time_mean,
+        "median": time_median,
+        "mode": time_mode,
+        "std": time_std,
+        "variance": time_variance,
+        "q1": time_q1,
+        "q3": time_q3,
+        "iqr": time_iqr,
+        "geometric_mean": time_geometric_mean,
+        "geometric_std": time_geometric_std,
+        "harmonic_mean": time_harmonic_mean,
+        "skewness": time_skewness,
+        "kurtosis": time_kurtosis,
+        "coefficient_variation": time_coefficient_variation,
+        "entropy": time_entropy,
         # **{f"time_hist{i}": t for i, t in enumerate(time_hist)},
-        "time_skewness_hist": time_skewness_hist,
-        "time_kurtosis_hist": time_kurtosis_hist,
+        "skewness_hist": time_skewness_hist,
+        "kurtosis_hist": time_kurtosis_hist,
     }
 

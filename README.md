@@ -131,7 +131,7 @@ class NewFeatures(Feature):
     self.feature_type="new_feature_type"
     self.available_class_methods = dict(inspect.getmembers(NewFeatures, predicate=inspect.ismethod))
     if self.feature_type in feature_names:
-        self.feature_names = ['new_feature_name_1','new_feature_name_2', ... ,'new_feature_name_n']
+        self.feature_names = [*self.available_class_methods.keys()]
     else:
         self.feature_names = feature_names
 

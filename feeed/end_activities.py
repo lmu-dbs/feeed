@@ -11,20 +11,7 @@ class EndActivities(Feature):
         self.feature_type="end_activities"
         self.available_class_methods = dict(inspect.getmembers(EndActivities, predicate=inspect.ismethod))
         if self.feature_type in feature_names:
-            self.feature_names = [
-                "n_unique_end_activities",
-                "end_activities_min",
-                "end_activities_max",
-                "end_activities_mean",
-                "end_activities_median",
-                "end_activities_std",
-                "end_activities_variance",
-                "end_activities_q1",
-                "end_activities_q3",
-                "end_activities_iqr",
-                "end_activities_skewness",
-                "end_activities_kurtosis"
-                ]
+            self.feature_names = [*self.available_class_methods.keys()]
         else:
             self.feature_names = feature_names
 

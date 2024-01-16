@@ -11,20 +11,7 @@ class StartActivities(Feature):
         self.feature_type="start_activities"
         self.available_class_methods = dict(inspect.getmembers(StartActivities, predicate=inspect.ismethod))
         if self.feature_type in feature_names:
-            self.feature_names = [
-                "n_unique_start_activities",
-                "start_activities_min",
-                "start_activities_max",
-                "start_activities_mean",
-                "start_activities_median",
-                "start_activities_std",
-                "start_activities_variance",
-                "start_activities_q1",
-                "start_activities_q3",
-                "start_activities_iqr",
-                "start_activities_skewness",
-                "start_activities_kurtosis"
-                ]
+            self.feature_names = [*self.available_class_methods.keys()]
         else:
             self.feature_names = feature_names
 

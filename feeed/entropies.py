@@ -9,21 +9,7 @@ class Entropies(Feature):
         self.feature_type="entropies"
         self.available_class_methods = dict(inspect.getmembers(Entropies, predicate=inspect.ismethod))
         if self.feature_type in feature_names:
-            self.feature_names = [
-                "entropy_trace",
-                "entropy_prefix",
-                "entropy_global_block",
-                "entropy_lempel_ziv",
-                "entropy_k_block_diff_1",
-                "entropy_k_block_diff_3",
-                "entropy_k_block_diff_5",
-                "entropy_k_block_ratio_1",
-                "entropy_k_block_ratio_3",
-                "entropy_k_block_ratio_5",
-                "entropy_knn_3",
-                "entropy_knn_5",
-                "entropy_knn_7"
-                ]
+            self.feature_names = [*self.available_class_methods.keys()]
         else:
             self.feature_names = feature_names
 

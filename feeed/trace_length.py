@@ -9,37 +9,7 @@ class TraceLength(Feature):
         self.feature_type="trace_length"
         self.available_class_methods = dict(inspect.getmembers(TraceLength, predicate=inspect.ismethod))
         if self.feature_type in feature_names:
-            self.feature_names = [
-                    'trace_len_min',
-                    'trace_len_max',
-                    'trace_len_mean',
-                    'trace_len_median',
-                    'trace_len_mode',
-                    'trace_len_std',
-                    'trace_len_variance',
-                    'trace_len_q1',
-                    'trace_len_q3',
-                    'trace_len_iqr',
-                    'trace_len_geometric_mean',
-                    'trace_len_geometric_std',
-                    'trace_len_harmonic_mean',
-                    'trace_len_skewness',
-                    'trace_len_kurtosis',
-                    'trace_len_coefficient_variation',
-                    'trace_len_entropy',
-                    'trace_len_hist1',
-                    'trace_len_hist2',
-                    'trace_len_hist3',
-                    'trace_len_hist4',
-                    'trace_len_hist5',
-                    'trace_len_hist6',
-                    'trace_len_hist7',
-                    'trace_len_hist8',
-                    'trace_len_hist9',
-                    'trace_len_hist10',
-                    'trace_len_skewness_hist',
-                    'trace_len_kurtosis_hist'
-                    ]
+            self.feature_names = [*self.available_class_methods.keys()]
         else:
             self.feature_names = feature_names
 

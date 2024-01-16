@@ -10,20 +10,7 @@ class Activities(Feature):
         self.feature_type='activities'
         self.available_class_methods = dict(inspect.getmembers(Activities, predicate=inspect.ismethod))
         if self.feature_type in feature_names:
-            self.feature_names = [
-                "n_unique_activities",
-                "activities_min",
-                "activities_max",
-                "activities_mean",
-                "activities_median",
-                "activities_std",
-                "activities_variance",
-                "activities_q1",
-                "activities_q3",
-                "activities_iqr",
-                "activities_skewness",
-                "activities_kurtosis"
-                ]
+            self.feature_names = [*self.available_class_methods.keys()]
         else:
             self.feature_names = feature_names
 

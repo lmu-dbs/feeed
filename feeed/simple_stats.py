@@ -9,11 +9,7 @@ class SimpleStats(Feature):
         self.feature_type = "simple_stats"
         self.available_class_methods = dict(inspect.getmembers(SimpleStats, predicate=inspect.ismethod))
         if self.feature_type in feature_names:
-            self.feature_names = [
-                    "n_traces",
-                    "n_unique_traces",
-                    "ratio_unique_traces_per_trace"
-                    ]
+            self.feature_names = [*self.available_class_methods.keys()]
         else:
             self.feature_names = feature_names
 

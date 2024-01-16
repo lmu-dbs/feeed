@@ -187,16 +187,7 @@ class Complexity(Feature):
         self.feature_type = "complexity"
         self.available_class_methods = dict(inspect.getmembers(Complexity, predicate=inspect.ismethod))
         if self.feature_type in feature_names:
-            self.feature_names = [
-                    "variant_entropy",
-                    "normalized_variant_entropy",
-                    "sequence_entropy",
-                    "normalized_sequence_entropy",
-                    "sequence_entropy_linear_forgetting",
-                    "normalized_sequence_entropy_linear_forgetting",
-                    "sequence_entropy_exponential_forgetting",
-                    "normalized_sequence_entropy_exponential_forgetting"
-                    ]
+            self.feature_names = [*self.available_class_methods.keys()]
         else:
             self.feature_names = feature_names
 

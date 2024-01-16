@@ -10,19 +10,7 @@ class TraceVariant(Feature):
         self.feature_type = "trace_variant"
         self.available_class_methods = dict(inspect.getmembers(TraceVariant, predicate=inspect.ismethod))
         if self.feature_type in feature_names:
-            self.feature_names = [
-                    "ratio_most_common_variant",
-                    "ratio_top_1_variants",
-                    "ratio_top_5_variants",
-                    "ratio_top_10_variants",
-                    "ratio_top_20_variants",
-                    "ratio_top_50_variants",
-                    "ratio_top_75_variants",
-                    "mean_variant_occurrence",
-                    "std_variant_occurrence",
-                    "skewness_variant_occurrence",
-                    "kurtosis_variant_occurrence"
-                    ]
+            self.feature_names = [*self.available_class_methods.keys()]
         else:
             self.feature_names = feature_names
 

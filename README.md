@@ -26,19 +26,19 @@ python -c "from feeed.feature_extractor import extract_features; print(extract_f
 ```
 
 ## Usage
-Output data contains at least one `feature` and a corresponding value obtained by that feature's specific computation. The schema looks like this:
+Output data contains at least one `feature` with `feature_name` and a corresponding value obtained by that feature's specific computation. The schema looks like this:
 ```python
 {
 'log': 'Sepsis'
-'feature': value
+'feature_name': value
 }
 ```
-Every `feature` belongs to a `feature_type`, and a `feature_type` can comprise multiple features. The following Feature Types table presents the correspondence between `feature_type` and `feature`. 
+Every `feature_name` belongs to a `feature_type`, and a `feature_type` can comprise multiple features. The following Feature Types table presents the correspondence between `feature_type` and `feature_name`. 
 
 ### Feature types
-Specific features can be selected referring to their feature types:
+Specific `feature_name`s and `feature_type`s can be selected as in the examples below:
 
-| Feature Type     | Features                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| Feature Type     | Feature Names                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 |------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | simple_stats     | n_traces, n_unique_traces, ratio_unique_traces_per_trace                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | trace_length     | trace_len_min, trace_len_max, trace_len_mean, trace_len_median, trace_len_mode, trace_len_std, trace_len_variance, trace_len_q1, trace_len_q3, trace_len_iqr, trace_len_geometric_mean, trace_len_geometric_std, trace_len_harmonic_mean, trace_len_skewness, trace_len_kurtosis, trace_len_coefficient_variation, trace_len_entropy, trace_len_hist1, trace_len_hist2, trace_len_hist3, trace_len_hist4, trace_len_hist5, trace_len_hist6, trace_len_hist7, trace_len_hist8, trace_len_hist9, trace_len_hist10, trace_len_skewness_hist, trace_len_kurtosis_hist |
@@ -47,18 +47,15 @@ Specific features can be selected referring to their feature types:
 | start_activities | n_unique_start_activities, start_activities_min, start_activities_max, start_activities_mean, start_activities_median, start_activities_std, start_activities_variance, start_activities_q1, start_activities_q3, start_activities_iqr, start_activities_skewness, start_activities_kurtosis                                                                                                                                                                                                                                                                      |
 | end_activities   | n_unique_end_activities, end_activities_min, end_activities_max, end_activities_mean, end_activities_median, end_activities_std, end_activities_variance, end_activities_q1, end_activities_q3, end_activities_iqr, end_activities_skewness, end_activities_kurtosis                                                                                                                                                                                                                                                                                              |
 | entropies        | entropy_trace, entropy_prefix, entropy_global_block, entropy_lempel_ziv, entropy_k_block_diff_1, entropy_k_block_diff_3, entropy_k_block_diff_5, entropy_k_block_ratio_1, entropy_k_block_ratio_3, entropy_k_block_ratio_5, entropy_knn_3, entropy_knn_5, entropy_knn_7                                                                                                                                                                                                                                                                                           |
-| complexity       | variant_entropy, normalized_variant_entropy, sequence_entropy, normalized_sequence_entropy, sequence_entropy_linear_forgetting, normalized_sequence_entropy_linear_forgetting, sequence_entropy_exponential_forgetting, normalized_sequence_entropy_exponential_forgetting                                                                                                                                                                                                                                                              
-| time_based       | (accumulated_, execution_, remaining_, waiting_)x(time_based_min, time_based_max, time_based_mean, time_based_median, time_based_mode, time_based_std, time_based_variance, time_based_q1, time_based_q3, time_based_iqr, time_based_geometric_mean, time_based_geometric_std, time_based_harmonic_mean, time_based_skewness, time_based_kurtosis, time_based_coefficient_variation, time_based_entropy, time_based_skewness_hist, time_based_kurtosis_hist |
+| complexity       | variant_entropy, normalized_variant_entropy, sequence_entropy, normalized_sequence_entropy, sequence_entropy_linear_forgetting, normalized_sequence_entropy_linear_forgetting, sequence_entropy_exponential_forgetting, normalized_sequence_entropy_exponential_forgetting
+| time_based       | (accumulated_time, execution_time, remaining_time, waiting_time)x(min, max, mean, median, mode, std, variance, q1, q3, iqr, geometric_mean, geometric_std, harmonic_mean, skewness, kurtosis, coefficient_variation, entropy, skewness_hist, kurtosis_hist) e.g. accumulated_time_based_min|
 
 ### Examples
 For the following examples we used Sepsis event data[1].
 #### Example 1:
 Passing sublist of feature_names, e.g. ['start_activities_min', 'end_activities_max'], to get a list of values for those features only.
-
-```python
-from feeed.feature_extractor import extract_features
-
-features = extract_features("test_logs/Sepsis.xes", ['start_activities_min', 'end_activities_max'])
+```shell
+python -c "from feeed.feature_extractor import extract_features; print(extract_features('test_logs/Sepsis.xes',  ['start_activities_min', 'end_activities_max']))"
 ```
 outputs
 ```python
@@ -68,10 +65,8 @@ SUCCESSFULLY: 2 features for SEPSIS.xes took 0:00:00.342855 sec.
 
 #### Example 2:
 Passing sublist of feature_types, e.g. ['start_activities'], to get a list of values for the feature type 'start_activities' only
-```python
-from feeed.feature_extractor import extract_features
-
-features = extract_features("test_logs/Sepsis.xes", ['start_activities'])
+```shell
+python -c "from feeed.feature_extractor import extract_features; print(extract_features('test_logs/Sepsis.xes',  ['start_activities']))"
 ```
 outputs
 ```python
@@ -81,6 +76,11 @@ SUCCESSFULLY: 12 features for SEPSIS.xes took 0:00:01.744333 sec.
 
 #### Example 3:
 By not passing any list of feature_types to get the full list of all feature values for all feature_types,
+from the shell
+```shell
+python -c "from feeed.feature_extractor import extract_features; print(extract_features('test_logs/Sepsis.xes'))"
+```
+or in a python script
 ```python
 from feeed.feature_extractor import extract_features
 
@@ -106,17 +106,17 @@ If both conditions apply, move on to implementation.
 
 ### Implementing any `NewFeatures` class
 * Clone this repo to your local machine using `git clone git@github.com:lmu-dbs/feeed.git`
-* Include the new module containing the `new_feature` computation in `feeed/`, resulting in `feeed/new_feature.py` (e.g. `feed/time.py`).
+* Include the new module containing the `new_feature` computation in `feeed/`, resulting in `feeed/new_feature.py` (e.g. `feeed/time.py`).
 * Import the new class `NewFeatures` in `feeed/feature_extractor.py` (e.g. `from .time import TimeBased as time_based`)
    * `NewFeatures` should inherit from [Feature](feeed/feature.py) to use `extract`.
    * Input for `NewFeatures` should support event-logs, as in [pm4py](https://pm4py.fit.fraunhofer.de/static/assets/api/2.7.5.1/api.html#input-pm4py-read).
-   * Ensure output of the `NewFeatures` class is a dict of the sort: `{"feature_name_1": value1, "feature_name_2": value2}`.
-* To call the new class and methods, include the new `feature_type` (e.g. "time_based") in the [list of `feeed/feature_extractor.py`](https://github.com/lmu-dbs/feeed/blob/688cbe290d5c434f98bc9f059da0010f81ec89f1/feeed/feature_extractor.py#L21).
-    * Include the `feature_type` in [FEATURE_TYPE](https://github.com/lmu-dbs/feeed/blob/53d2473509d5eccb9126b7d7bd8487132afd2eb7/feeed/feature_extractor.py#L14)
-* Include the new `feature type` (e.g. "time_based") and its `feature_names`s (e.g. "time_geometric_mean") in the [Feature Type table](#feature-types).
+   * Ensure output of the `NewFeatures` class is a dict of the sort: `{"new_feature_name_1": value1, "new_feature_name_2": value2}`.
+* To call the new class and methods, include the new `new_feature_type` (e.g. "time_based") in the [list of `feeed/feature_extractor.py`](https://github.com/lmu-dbs/feeed/blob/688cbe290d5c434f98bc9f059da0010f81ec89f1/feeed/feature_extractor.py#L21).
+    * Include the `new_feature_type` in [NEW_FEATURE_TYPE](https://github.com/lmu-dbs/feeed/blob/53d2473509d5eccb9126b7d7bd8487132afd2eb7/feeed/feature_extractor.py#L14)
+* Include the new `new_feature_type` (e.g. "time_based") and its `feature_names`s (e.g. "accumulated_time_geometric_mean") in the [Feature Type table](#feature-types).
 
 Below, see an example of pseudo-code of how to implement a new (generic) feature extraction class.
-Note that `cls` is the class object of the form `<class 'feeed.feature_type.NewFeatures>`;
+Note that `cls` is the class object of the form `<class 'feeed.nwe_feature_type.NewFeatures>`;
 `**kwargs` points to e.g. log attributes, which can also be replaced by simply `log`, if desired;
 and `summarize()` needs to be implemented depending on the feature level,
 meaning if `arr_values` is on a log level, `summarize` is the identity function:
@@ -127,11 +127,11 @@ import inspect
 from .feature import Feature
 
 class NewFeatures(Feature):
-    def __init__(self, feature_names='feature_type'):
-    self.feature_type="feature_type"
+    def __init__(self, feature_names='new_feature_type'):
+    self.feature_type="new_feature_type"
     self.available_class_methods = dict(inspect.getmembers(NewFeatures, predicate=inspect.ismethod))
     if self.feature_type in feature_names:
-        self.feature_names = ['feature_name_1','feature_name_2', ... ,'feature_name_n']
+        self.feature_names = ['new_feature_name_1','new_feature_name_2', ... ,'new_feature_name_n']
     else:
         self.feature_names = feature_names
 
@@ -139,12 +139,12 @@ class NewFeatures(Feature):
         return len(log)*2
 
     @classmethod
-    def foo(cls, **kwargs):
+    def new_feature_name_1(cls, **kwargs):
         double_length = NewFeatures.helper_funtion(log)
         return kwargs["event_attribute"] ** double_length
 
     @classmethod
-    def bar(cls, **kwargs):
+    def new_feature_name_2(cls, **kwargs):
         double_length = NewFeatures.helper_funtion(log)
         return kwargs["event_attribute"] + double_length
 
@@ -158,7 +158,7 @@ python -c "from feeed.feature_extractor import extract_features; print(extract_f
 ```
 and
 ```bash
-python -c "from feeed.feature_extractor import extract_features; print(extract_features('test_logs/SEPSIS.xes', ['feature_name_1']))"
+python -c "from feeed.feature_extractor import extract_features; print(extract_features('test_logs/SEPSIS.xes', ['new_feature_name_1', 'new_feature_name_2']))"
 ```
 
 ### Update documentation

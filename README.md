@@ -58,7 +58,7 @@ Passing sublist of feature_names, e.g. ['start_activities_min', 'end_activities_
 ```python
 from feeed.feature_extractor import extract_features
 
-features = extract_features("test_logs/Sepsis.xes", ['start_activities', 'end_activities_max'])
+features = extract_features("test_logs/Sepsis.xes", ['start_activities_min', 'end_activities_max'])
 ```
 outputs
 ```python

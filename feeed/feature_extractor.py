@@ -56,6 +56,6 @@ def extract_features(event_logs_path, feature_types=None):
     except (NameError, TypeError):
         print(f"Invalid value for feature_types argument. Use a sublist of the following:"
               "\n['simple_stats', 'trace_length', 'trace_variant', 'activities', 'start_activities', 'end_activities',",
-              " 'entropies', 'complexity', 'time_based] or None")
+              " 'entropies', 'internal_entropies', 'complexity', 'time_based] or None")
 
     return features

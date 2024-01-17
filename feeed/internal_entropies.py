@@ -109,13 +109,13 @@ def entropy_k_block_diff(log, k):
 # Calculating knn entropies
 def entropy_flattened_knn(log, k=1):
     unique_traces = variants_filter.get_variants(log)
-    local_neighbour_list = find_nearest_neighbor(unique_traces, k)
+    unique_traces = list(unique_traces)
+    local_neighbour_list = find_nearest_neighbors(unique_traces, k)
     n= len(unique_traces)
     
     knn_entropy = 0
-    
     for neighbour in local_neighbour_list:
-        item, d, max_len, normalized_lev = neighbour
+        normalized_lev = neighbour
         part_2 = math.log(normalized_lev)
         part_3 = math.log(math.pow(math.pi, 1/ 2.0) / math.gamma(1.0 / 2.0 + 1.0))
         part_4 = 0.5772
@@ -123,7 +123,6 @@ def entropy_flattened_knn(log, k=1):
         part_6 = math.log(n)
         local_sum = 1/n * (part_2 + part_3 + part_4 - part_5 + part_6)
         knn_entropy += local_sum
-        
     return knn_entropy
 
 # some helper functions for calculating knn entropy
@@ -139,11 +138,33 @@ def harmonic_sum(j):
             L_j += 1.0 / float(i)
         return L_j
     
-def find_nearest_neighbor(trace_list, k =1):
+def calculate_distance_matrix(trace_list):
+    n = len(trace_list)
+    distance_matrix = [[0] * n for _ in range(n)]
+
+    for i in range(n):
+        for j in range(i + 1, n):
+            dist = distance(trace_list[i], trace_list[j])
+            distance_matrix[i][j] = dist
+            distance_matrix[j][i] = dist
+
+    return distance_matrix
+
+def find_nearest_neighbors(trace_list, k=1):
+    n = len(trace_list)
+    distance_matrix = calculate_distance_matrix(trace_list)
+
+    def calculate_normalized_distance(i, j):
+        return distance_matrix[i][j] / max(len(trace_list[i]), len(trace_list[j]))
+
     neighbour_list = []
-    for other_trace in trace_list:
-        list1 = [(trace, distance(other_trace,trace), max(len(other_trace),len(trace)), distance(other_trace,trace)/max(len(other_trace),len(trace)))for trace in trace_list]
-        list2 = sorted(list1,key=lambda x: x[3])
-        filtered_list = list(filter(lambda x: x[3] != 0, list2))
-        neighbour_list.append(filtered_list[k-1])
+
+    for i in range(n):
+        distances = [(calculate_normalized_distance(i, j))
+                     for j in range(n) if i != j]
+        distances.sort(key=lambda x: x)
+
+        filtered_distances = [d for d in distances if d != 0]
+        neighbour_list.append(filtered_distances[k-1])
+
     return neighbour_list

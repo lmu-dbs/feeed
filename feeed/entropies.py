@@ -1,55 +1,88 @@
+import inspect
 import os
 import subprocess
 
+from .feature import Feature
 
-def default_call(path, arg1, arg2, arg3):
-    output = subprocess.run(
-        [
-            "java",
-            "-jar",
-            f"{os.getcwd()}/../feeed/feeed/eventropy.jar",
-            arg1,
-            arg2,
-            arg3,
-            f"{os.getcwd()}/{path}",
-        ],
-        capture_output=True,
-        text=True,
-    )
-    try:
-        if len(output.stdout) == 0:
+class Entropies(Feature):
+    def __init__(self, feature_names='entropies'):
+        self.feature_type="entropies"
+        self.available_class_methods = dict(inspect.getmembers(Entropies, predicate=inspect.ismethod))
+        if self.feature_type in feature_names:
+            self.feature_names = [*self.available_class_methods.keys()]
+        else:
+            self.feature_names = feature_names
+
+    def default_call(path, arg1, arg2, arg3):
+        output = subprocess.run(
+            [
+                "java",
+                "-jar",
+                f"{os.getcwd()}/../feeed/feeed/eventropy.jar",
+                arg1,
+                arg2,
+                arg3,
+                f"{os.getcwd()}/{path}",
+            ],
+            capture_output=True,
+            text=True,
+        )
+        try:
+            if len(output.stdout) == 0:
+                return 0
+            return float(output.stdout.strip().split(":")[1])
+        except ValueError:
+            print(output.stdout)
             return 0
-        return float(output.stdout.strip().split(":")[1])
-    except ValueError:
-        print(output.stdout)
-        return 0
 
-def entropies(path):
-    single_args = ["-f", "-p", "-B", "-z"]
-    double_args = ["-d", "-r"]
+    @classmethod
+    def entropy_trace(cls, log_path):
+        return Entropies.default_call(log_path, "-f", "", "")
 
-    entrops = []
-    for arg in single_args:
-        entrops.append(default_call(path, arg, "", ""))
-    for arg in double_args:
-        for i in ["1", "3", "5"]:
-            entrops.append(default_call(path, arg, i, ""))
-    for i in ["3", "5", "7"]:
-        entrops.append(default_call(path, "-k", i, "1"))
+    @classmethod
+    def entropy_prefix(cls, log_path):
+        return Entropies.default_call(log_path, "-p", "", "")
 
-    results ={
-			"entropy_trace": entrops[0],
-			"entropy_prefix": entrops[1],
-			"entropy_global_block": entrops[2],
-			"entropy_lempel_ziv": entrops[3],
-			"entropy_k_block_diff_1": entrops[4],
-			"entropy_k_block_diff_3": entrops[5],
-			"entropy_k_block_diff_5": entrops[6],
-			"entropy_k_block_ratio_1": entrops[7],
-			"entropy_k_block_ratio_3": entrops[8],
-			"entropy_k_block_ratio_5": entrops[9],
-			"entropy_knn_3": entrops[10],
-			"entropy_knn_5": entrops[11],
-			"entropy_knn_7": entrops[12]
-			}
-    return results
+    @classmethod
+    def entropy_global_block(cls, log_path):
+        return Entropies.default_call(log_path, "-B", "", "")
+
+    @classmethod
+    def entropy_lempel_ziv(cls, log_path):
+        return Entropies.default_call(log_path, "-z", "", "")
+
+    @classmethod
+    def entropy_k_block_diff_1(cls, log_path):
+        return Entropies.default_call(log_path, "-d", "1", "")
+
+    @classmethod
+    def entropy_k_block_diff_3(cls, log_path):
+        return Entropies.default_call(log_path, "-d", "3", "")
+
+    @classmethod
+    def entropy_k_block_diff_5(cls, log_path):
+        return Entropies.default_call(log_path, "-d", "5", "")
+
+    @classmethod
+    def entropy_k_block_ratio_1(cls, log_path):
+        return Entropies.default_call(log_path, "-r", "1", "")
+
+    @classmethod
+    def entropy_k_block_ratio_3(cls, log_path):
+        return Entropies.default_call(log_path, "-r", "3", "")
+
+    @classmethod
+    def entropy_k_block_ratio_5(cls, log_path):
+        return Entropies.default_call(log_path, "-r", "5", "")
+
+    @classmethod
+    def entropy_knn_3(cls, log_path):
+        return Entropies.default_call(log_path, "-k", "3", "1")
+
+    @classmethod
+    def entropy_knn_5(cls, log_path):
+        return Entropies.default_call(log_path, "-k", "5", "1")
+
+    @classmethod
+    def entropy_knn_7(cls, log_path):
+        return Entropies.default_call(log_path, "-k", "7", "1")

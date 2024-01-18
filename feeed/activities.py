@@ -1,37 +1,79 @@
+import inspect
 import numpy as np
-from scipy import stats
+
+from .feature import Feature
 from pm4py.algo.filtering.log.attributes import attributes_filter
+from scipy import stats
 
+class Activities(Feature):
+    def __init__(self, feature_names='activities'):
+        self.feature_type='activities'
+        self.available_class_methods = dict(inspect.getmembers(Activities, predicate=inspect.ismethod))
+        if self.feature_type in feature_names:
+            self.feature_names = [*self.available_class_methods.keys()]
+        else:
+            self.feature_names = feature_names
 
-def activities(log):
-    activities = attributes_filter.get_attribute_values(log, "concept:name")
-    n_unique_activities = len(activities)
+    def activities(log):
+        return attributes_filter.get_attribute_values(log, "concept:name")
 
-    activities_occurrences = list(activities.values())
-    activities_min = np.min(activities_occurrences)
-    activities_max = np.max(activities_occurrences)
-    activities_mean = np.mean(activities_occurrences)
-    activities_median = np.median(activities_occurrences)
-    activities_std = np.std(activities_occurrences)
-    activities_variance = np.var(activities_occurrences)
-    activities_q1 = np.percentile(activities_occurrences, 25)
-    activities_q3 = np.percentile(activities_occurrences, 75)
-    activities_iqr = stats.iqr(activities_occurrences)
-    activities_skewness = stats.skew(activities_occurrences)
-    activities_kurtosis = stats.kurtosis(activities_occurrences)
+    @classmethod
+    def n_unique_activities(cls, log):
+        activities = Activities.activities(log)
+        return len(activities)
 
-    results = {
-			"n_unique_activities": n_unique_activities,
-			"activities_min": activities_min,
-			"activities_max": activities_max,
-			"activities_mean": activities_mean,
-			"activities_median": activities_median,
-			"activities_std": activities_std,
-			"activities_variance": activities_variance,
-			"activities_q1": activities_q1,
-			"activities_q3": activities_q3,
-			"activities_iqr": activities_iqr,
-			"activities_skewness": activities_skewness,
-			"activities_kurtosis": activities_kurtosis
-            }
-    return results
+    @classmethod
+    def activities_min(cls, log):
+        activities = Activities.activities(log)
+        return np.min(list(activities.values()))
+
+    @classmethod
+    def activities_max(cls, log):
+        activities = Activities.activities(log)
+        return np.max(list(activities.values()))
+
+    @classmethod
+    def activities_mean(cls, log):
+        activities = Activities.activities(log)
+        return np.mean(list(activities.values()))
+
+    @classmethod
+    def activities_median(cls, log):
+        activities = Activities.activities(log)
+        return np.median(list(activities.values()))
+
+    @classmethod
+    def activities_std(cls, log):
+        activities = Activities.activities(log)
+        return np.std(list(activities.values()))
+
+    @classmethod
+    def activities_variance(cls, log):
+        activities = Activities.activities(log)
+        return np.var(list(activities.values()))
+
+    @classmethod
+    def activities_q1(cls, log):
+        activities = Activities.activities(log)
+        return np.percentile(list(activities.values()), 25)
+
+    @classmethod
+    def activities_q3(cls, log):
+        activities = Activities.activities(log)
+        return np.percentile(list(activities.values()), 75)
+
+    @classmethod
+    def activities_iqr(cls, log):
+        activities = Activities.activities(log)
+        return stats.iqr(list(activities.values()))
+
+    @classmethod
+    def activities_skewness(cls, log):
+        activities = Activities.activities(log)
+        return stats.skew(list(activities.values()))
+
+    @classmethod
+    def activities_kurtosis(cls, log):
+        activities = Activities.activities(log)
+        return stats.kurtosis(list(activities.values()))
+

@@ -10,16 +10,17 @@ def internal_entropies(log):
         "entropy_prefix_flattened_": prefix_flattened_entropy(log),
         "entropy_global_block": global_block_entropy(log),
         "entropy_global_block_flattened": flattened_global_block_entropy(log),
-        "entropy_lempel_zev_flattened": entropy_lempel_zev_flattened(log),
+        "entropy_lempel_ziv": entropy_lempel_zev(log),
+        "entropy_lempel_ziv_flattened": entropy_lempel_zev_flattened(log),
         "entropy_k_block_diff_1": entropy_k_block_diff(log, k=1),
         "entropy_k_block_diff_3": entropy_k_block_diff(log, k=3),
         "entropy_k_block_diff_5": entropy_k_block_diff(log, k=5),
         "entropy_k_block_ratio_1": entropy_k_block_ratio(log, k=1),
         "entropy_k_block_ratio_3": entropy_k_block_ratio(log, k=3),
         "entropy_k_block_ratio_5": entropy_k_block_ratio(log, k=5),
-        "entropy_knn_flattened_3": entropy_flattened_knn(log, k=3),
-        "entropy_knn_flattened_5": entropy_flattened_knn(log, k=5),
-        "entropy_knn_flattened_7": entropy_flattened_knn(log, k=7),
+        "entropy_knn_3": entropy_flattened_knn(log, k=3),
+        "entropy_knn_5": entropy_flattened_knn(log, k=5),
+        "entropy_knn_7": entropy_flattened_knn(log, k=7),
     }
     return results
 
@@ -30,7 +31,7 @@ def trace_entropies(log):
     # Calculate trace entropy
     trace_entropy = sum((count / len(log)) * math.log2(count / len(log)) for count in trace_counts.values())
     
-    return -trace_entropy  # Use negative sign to follow the convention of minimizing entropy
+    return round(-trace_entropy,3)  # Use negative sign to follow the convention of minimizing entropy
 
 
 def prefix_entropy(log):
@@ -47,7 +48,7 @@ def prefix_entropy(log):
     total_prefixes = len(all_possible_prefixes)
     prefix_entropy = sum((count / total_prefixes) * math.log2(count / total_prefixes) for count in prefix_counts.values())
 
-    return -prefix_entropy
+    return round(-prefix_entropy,3)
 
 def prefix_flattened_entropy(log):
     unique_traces = variants_filter.get_variants(log)
@@ -62,7 +63,7 @@ def prefix_flattened_entropy(log):
     total_prefixes = len(all_possible_prefixes)
     prefix_entropy = sum((count / total_prefixes) * math.log2(count / total_prefixes) for count in prefix_counts.values())
 
-    return -prefix_entropy
+    return round(-prefix_entropy,3)
 
 def global_block_entropy(log):
     all_traces = [tuple(event["concept:name"] for event in trace) for trace in log]
@@ -76,7 +77,7 @@ def global_block_entropy(log):
     # Calculate entropy
     substring_entropy = sum((count / total_substrings) * math.log2(count / total_substrings) for count in substring_counts.values())
     
-    return -substring_entropy
+    return round(-substring_entropy,3)
 
 def flattened_global_block_entropy(log):
     all_traces = variants_filter.get_variants(log)
@@ -90,7 +91,7 @@ def flattened_global_block_entropy(log):
     # Calculate entropy
     substring_entropy = sum((count / total_substrings) * math.log2(count / total_substrings) for count in substring_counts.values())
     
-    return -substring_entropy
+    return round(-substring_entropy,3)
 
 def entropy_k_block(log, k=1):
     all_k_object_substrings = [trace[i:i + k] for trace in (tuple(event["concept:name"] for event in trace) for trace in log) for i in range(len(trace) - k + 1)]
@@ -99,13 +100,32 @@ def entropy_k_block(log, k=1):
     total_k_substrings = len(all_k_object_substrings)
 
     k_substring_entropy = sum((count / total_k_substrings) * math.log2(count / total_k_substrings) for count in k_sub_counts.values()) 
-    return -k_substring_entropy
+    return round(-k_substring_entropy,3)
 
 def entropy_k_block_ratio(log, k):
     return entropy_k_block(log, k)/k
 
 def entropy_k_block_diff(log, k):
     return entropy_k_block(log, k) - entropy_k_block(log, k-1)
+
+def entropy_lempel_zev(log):
+    unique_traces = [tuple(event["concept:name"] for event in trace) for trace in log]
+    N, N_w, words = 0, 0, set()
+
+    for trace in unique_traces:
+        word = ""
+        for activity in trace:
+            word += activity
+            if word not in words:
+                words.add(word)
+                word = ""
+
+        N += len(trace)
+
+    N_w = len(words)
+    
+    lempel_zev_entropy = N_w * math.log2(N) / N
+    return round(lempel_zev_entropy,3)
 
 def entropy_lempel_zev_flattened(log):
     unique_traces = list(variants_filter.get_variants(log))
@@ -124,7 +144,7 @@ def entropy_lempel_zev_flattened(log):
     N_w = len(words)
     
     lempel_zev_entropy = N_w * math.log2(N) / N
-    return lempel_zev_entropy
+    return round(lempel_zev_entropy,3)
 
 # Calculating knn entropies
 def entropy_flattened_knn(log, k=1):
@@ -143,7 +163,7 @@ def entropy_flattened_knn(log, k=1):
         part_6 = math.log(n)
         local_sum = 1/n * (part_2 + part_3 + part_4 - part_5 + part_6)
         knn_entropy += local_sum
-    return knn_entropy
+    return round(knn_entropy,3)
 
 # some helper functions for calculating knn entropy
 

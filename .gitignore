@@ -1,1 +1,4 @@
 __pycache__/
+feeed/eventropy/
+test_logs/
+exp.ipynb

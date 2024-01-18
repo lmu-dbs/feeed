@@ -10,6 +10,7 @@ def internal_entropies(log):
         "entropy_prefix_flattened_": prefix_flattened_entropy(log),
         "entropy_global_block": global_block_entropy(log),
         "entropy_global_block_flattened": flattened_global_block_entropy(log),
+        "entropy_lempel_zev_flattened": entropy_lempel_zev_flattened(log),
         "entropy_k_block_diff_1": entropy_k_block_diff(log, k=1),
         "entropy_k_block_diff_3": entropy_k_block_diff(log, k=3),
         "entropy_k_block_diff_5": entropy_k_block_diff(log, k=5),
@@ -105,6 +106,25 @@ def entropy_k_block_ratio(log, k):
 
 def entropy_k_block_diff(log, k):
     return entropy_k_block(log, k) - entropy_k_block(log, k-1)
+
+def entropy_lempel_zev_flattened(log):
+    unique_traces = list(variants_filter.get_variants(log))
+    N, N_w, words = 0, 0, set()
+
+    for trace in unique_traces:
+        word = ""
+        for activity in trace:
+            word += activity
+            if word not in words:
+                words.add(word)
+                word = ""
+
+        N += len(trace)
+
+    N_w = len(words)
+    
+    lempel_zev_entropy = N_w * math.log2(N) / N
+    return lempel_zev_entropy
 
 # Calculating knn entropies
 def entropy_flattened_knn(log, k=1):

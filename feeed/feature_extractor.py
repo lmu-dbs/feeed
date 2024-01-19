@@ -50,7 +50,7 @@ def extract_features(event_logs_path, feature_types=None):
         start_feat = dt.now()
         ft_type = feature_type(ft_name)
 
-        if ft_type == "entropies" or ft_type == "complexity":
+        if ft_type == "complexity":
             feature_values = eval(f"{ft_type}(feature_names =['{ft_name}']).extract(event_logs_path)")
         else:
             feature_values = eval(f"{ft_type}(feature_names=['{ft_name}']).extract(log)")

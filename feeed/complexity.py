@@ -254,6 +254,10 @@ class Complexity(Feature):
         log = []
         for trace in pm4py_log:
             for event in trace:
+                try:
+                    event["time:timestamp"] = pd.to_datetime(event["time:timestamp"])
+                except:
+                    event["time:timestamp"] = pd.to_datetime(event["time:timestamp"], format="mixed")
                 log.append(
                     Event(
                         trace.attributes["concept:name"],

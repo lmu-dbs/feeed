@@ -184,7 +184,7 @@ class Entropies(Feature):
         return round(lempel_zev_entropy,3)
     
     @classmethod
-    def entropy_lempel_zev_flattened(cls,log):
+    def entropy_lempel_ziv_flattened(cls,log):
         unique_traces = list(variants_filter.get_variants(log))
         N, N_w, words = 0, 0, set()
 

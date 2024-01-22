@@ -13,6 +13,7 @@ setup(
             'tqdm==4.65.0',
             'pm4py==2.7.2',
             'scipy>=1.10.1',
+            'Levenshtein==0.23.0',
             ],
         packages = ['feeed', 'feeed.utils'],
         classifiers=[

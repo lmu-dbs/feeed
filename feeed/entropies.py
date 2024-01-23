@@ -179,10 +179,10 @@ class Entropies(Feature):
             N += len(trace)
 
         N_w = len(words)
-        
+
         lempel_zev_entropy = N_w * math.log2(N) / N
         return round(lempel_zev_entropy,3)
-    
+
     @classmethod
     def entropy_lempel_ziv_flattened(cls,log):
         unique_traces = list(variants_filter.get_variants(log))

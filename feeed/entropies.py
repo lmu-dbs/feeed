@@ -1,9 +1,10 @@
 import inspect
+import math
 import os
 import subprocess
+
 from collections import Counter
-import math
-from Levenshtein import distance 
+from Levenshtein import distance
 from pm4py.algo.filtering.log.variants import variants_filter
 
 from .feature import Feature

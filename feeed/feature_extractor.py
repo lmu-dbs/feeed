@@ -1,3 +1,5 @@
+import pandas as pd
+import subprocess
 from .simple_stats import SimpleStats as simple_stats
 from .trace_length import TraceLength as trace_length
 from .trace_variant import TraceVariant as trace_variant
@@ -34,11 +36,61 @@ def feature_type(feature_name):
     raise ValueError(f"ERROR: Invalid value for feature_key argument: {feature_name}. See README.md for " +
                      f"supported feature_names or use a sublist of the following: {FEATURE_TYPES} or None")
 
+def read_pm4py_log(filename=None, verbose=False):
+    if filename == None:
+        raise Exception("No file specified")
+
+    if filename.split(".")[-1] == "xes":
+        input_file = filename
+        from pm4py.objects.log.importer.xes import importer as xes_importer
+
+        pm4py_log = xes_importer.apply(input_file)
+
+    elif filename.split(".")[-1] == "csv":
+        subprocess.call(["head", filename])
+        i_h = input("Does the file have a header? [y/N]:") or "n"
+        h = 0 if i_h != "n" else None
+        i_d = input("What is the delimiter? [,]:") or ","
+        i_c = input("What is the column number of case ID? [0]:")
+        i_c = 0 if i_c == "" else int(i_c)
+        i_a = input("What is the column number of activity name? [1]:")
+        i_a = 1 if i_a == "" else int(i_a)
+        i_t = input("What is the column number of timestamp? [2]:")
+        i_t = 2 if i_t == "" else int(i_t)
+
+        from pm4py.objects.conversion.log import converter as log_converter
+        from pm4py.objects.log.util import dataframe_utils
+
+        log_csv = pd.read_csv(filename, sep=i_d, header=h)
+        log_csv.rename(
+            columns={
+                log_csv.columns[i_c]: "case",
+                log_csv.columns[i_a]: "concept:name",
+                log_csv.columns[i_t]: "time:timestamp",
+            },
+            inplace=True,
+        )
+        for col in log_csv.columns:
+            if isinstance(col, int):
+                log_csv.rename(columns={col: "column" + str(col)}, inplace=True)
+        log_csv = dataframe_utils.convert_timestamp_columns_in_df(log_csv)
+        log_csv = log_csv.sort_values("time:timestamp")
+        parameters = {
+            log_converter.Variants.TO_EVENT_LOG.value.Parameters.CASE_ID_KEY: "case"
+        }
+        if verbose:
+            print(log_csv)
+        pm4py_log = log_converter.apply(
+            log_csv, parameters=parameters, variant=log_converter.Variants.TO_EVENT_LOG
+        )
+    else:
+        raise Exception("File type not recognized, should be xes or csv")
+
+    return pm4py_log
+
 def extract_features(event_logs_path, feature_types=None):
     log_name = event_logs_path.rsplit("/", 1)[-1]
-    log = xes_importer.apply(
-        f"{event_logs_path}", parameters={"show_progress_bar": False}
-    )
+    log = read_pm4py_log(event_logs_path)
 
     if feature_types is None:
         feature_types = FEATURE_TYPES
@@ -50,7 +102,7 @@ def extract_features(event_logs_path, feature_types=None):
         start_feat = dt.now()
         ft_type = feature_type(ft_name)
 
-        if ft_type == "entropies" or ft_type == "complexity":
+        if ft_type == "entropies":
             feature_values = eval(f"{ft_type}(feature_names =['{ft_name}']).extract(event_logs_path)")
         else:
             feature_values = eval(f"{ft_type}(feature_names=['{ft_name}']).extract(log)")

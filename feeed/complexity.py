@@ -2,7 +2,6 @@ import inspect
 import math
 import pandas as pd
 import pm4py
-import subprocess
 
 from .feature import Feature
 
@@ -46,7 +45,7 @@ class ActivityType(Node):
             + "</sub>"
             + ">"
         )
-        self.name = activity + "Type" + str(c) + "_" + str(self.j)
+        self.name = str(activity) + "Type" + str(c) + "_" + str(self.j)
         self.accepting = accepting
 
     def getPrefix(self):
@@ -191,69 +190,19 @@ class Complexity(Feature):
         else:
             self.feature_names = feature_names
 
-    def path_to_epa(path):
-        pm4py_log = Complexity.generate_pm4py_log(path)
+    def log_to_epa(pm4py_log):
         log = Complexity.generate_log(pm4py_log)
         epa = Complexity.build_graph(log)
         return epa
-
-    def generate_pm4py_log(filename=None, verbose=False):
-        if filename == None:
-            raise Exception("No file specified")
-
-        if filename.split(".")[-1] == "xes":
-            input_file = filename
-            from pm4py.objects.log.importer.xes import importer as xes_importer
-
-            pm4py_log = xes_importer.apply(input_file)
-        elif filename.split(".")[-1] == "csv":
-            subprocess.call(["head", filename])
-            i_h = input("Does the file have a header? [y/N]:") or "n"
-            h = 0 if i_h != "n" else None
-            i_d = input("What is the delimiter? [,]:") or ","
-            i_c = input("What is the column number of case ID? [0]:")
-            i_c = 0 if i_c == "" else int(i_c)
-            i_a = input("What is the column number of activity name? [1]:")
-            i_a = 1 if i_a == "" else int(i_a)
-            i_t = input("What is the column number of timestamp? [2]:")
-            i_t = 2 if i_t == "" else int(i_t)
-
-            from pm4py.objects.conversion.log import converter as log_converter
-            from pm4py.objects.log.util import dataframe_utils
-
-            log_csv = pd.read_csv(filename, sep=i_d, header=h)
-            log_csv.rename(
-                columns={
-                    log_csv.columns[i_c]: "case",
-                    log_csv.columns[i_a]: "concept:name",
-                    log_csv.columns[i_t]: "time:timestamp",
-                },
-                inplace=True,
-            )
-            for col in log_csv.columns:
-                if isinstance(col, int):
-                    log_csv.rename(columns={col: "column" + str(col)}, inplace=True)
-            log_csv = dataframe_utils.convert_timestamp_columns_in_df(log_csv)
-            log_csv = log_csv.sort_values("time:timestamp")
-            parameters = {
-                log_converter.Variants.TO_EVENT_LOG.value.Parameters.CASE_ID_KEY: "case"
-            }
-            if verbose:
-                print(log_csv)
-            pm4py_log = log_converter.apply(
-                log_csv, parameters=parameters, variant=log_converter.Variants.TO_EVENT_LOG
-            )
-
-        else:
-            raise Exception("File type not recognized, should be xes or csv")
-
-        return pm4py_log
-
 
     def generate_log(pm4py_log, verbose=False):
         log = []
         for trace in pm4py_log:
             for event in trace:
+                try:
+                    event["time:timestamp"] = pd.to_datetime(event["time:timestamp"])
+                except:
+                    event["time:timestamp"] = pd.to_datetime(event["time:timestamp"], format="mixed")
                 log.append(
                     Event(
                         trace.attributes["concept:name"],
@@ -397,9 +346,14 @@ class Complexity(Feature):
             log_complexity_linear = 0
             for AT in Complexity.flatten(pa.activity_types.values()):
                 for event in AT.sequence:
-                    log_complexity_linear += (
-                        1 - (last_timestamp - event.timestamp).total_seconds() / timespan
-                    )
+                    try:
+                        log_complexity_linear += (
+                            1 - (last_timestamp - event.timestamp).total_seconds() / timespan
+                        )
+                    except ValueError:
+                        log_complexity_linear += (
+                                1 - (last_timestamp - event.timestamp).total_seconds() / (timespan+1e-6)
+                        )
 
             log_complexity_linear = math.log(log_complexity_linear) * log_complexity_linear
 
@@ -407,10 +361,16 @@ class Complexity(Feature):
                 e = 0
                 for AT in pa.c_index[i]:
                     for event in AT.sequence:
-                        e += (
-                            1
-                            - (last_timestamp - event.timestamp).total_seconds() / timespan
-                        )
+                        try:
+                            e += (
+                                1
+                                - (last_timestamp - event.timestamp).total_seconds() / timespan
+                            )
+                        except ValueError:
+                            e += (
+                                    1
+                                    - (last_timestamp - event.timestamp).total_seconds() / (timespan+1e-6)
+                            )
                 log_complexity_linear -= math.log(e) * e
 
             return log_complexity_linear, (log_complexity_linear / normalize)
@@ -421,61 +381,74 @@ class Complexity(Feature):
             log_complexity_exp = 0
             for AT in Complexity.flatten(pa.activity_types.values()):
                 for event in AT.sequence:
-                    log_complexity_exp += math.exp(
-                        (-(last_timestamp - event.timestamp).total_seconds() / timespan) * k
-                    )
+                    try:
+                        log_complexity_exp += math.exp(
+                            (-(last_timestamp - event.timestamp).total_seconds() / timespan) * k
+                        )
+                    except ValueError:
+                        log_complexity_exp += math.exp(
+                            (-(last_timestamp - event.timestamp).total_seconds() / (timespan+1e-6)) * k
+                        )
+
 
             log_complexity_exp = math.log(log_complexity_exp) * log_complexity_exp
             for i in list(pa.c_index.keys())[1:]:
                 e = 0
                 for AT in pa.c_index[i]:
                     for event in AT.sequence:
-                        e += math.exp(
-                            (-(last_timestamp - event.timestamp).total_seconds() / timespan)
-                            * k
-                        )
+                        try:
+                            e += math.exp(
+                                (-(last_timestamp - event.timestamp).total_seconds() / timespan)
+                                * k
+                            )
+                        except ValueError:
+                            e += math.exp(
+                                (-(last_timestamp - event.timestamp).total_seconds() / (timespan+1e-6))
+                                * k
+                            )
+
                 log_complexity_exp -= math.log(e) * e
             return log_complexity_exp, (log_complexity_exp / normalize)
         else:
             return None, None
 
     @classmethod
-    def variant_entropy(cls, log_path):
-        epa = Complexity.path_to_epa(log_path)
+    def variant_entropy(cls, log):
+        epa = Complexity.log_to_epa(log)
         return Complexity.graph_complexity(epa)[0]
 
     @classmethod
-    def normalized_variant_entropy(cls, log_path):
-        epa = Complexity.path_to_epa(log_path)
+    def normalized_variant_entropy(cls, log):
+        epa = Complexity.log_to_epa(log)
         return Complexity.graph_complexity(epa)[1]
 
     @classmethod
-    def sequence_entropy(cls, log_path):
-        epa = Complexity.path_to_epa(log_path)
+    def sequence_entropy(cls, log):
+        epa = Complexity.log_to_epa(log)
         return Complexity.log_complexity(epa)[0]
 
     @classmethod
-    def normalized_sequence_entropy(cls, log_path):
-        epa = Complexity.path_to_epa(log_path)
+    def normalized_sequence_entropy(cls, log):
+        epa = Complexity.log_to_epa(log)
         return Complexity.log_complexity(epa)[1]
 
     @classmethod
-    def sequence_entropy_linear_forgetting(cls, log_path):
-        epa = Complexity.path_to_epa(log_path)
+    def sequence_entropy_linear_forgetting(cls, log):
+        epa = Complexity.log_to_epa(log)
         return Complexity.log_complexity(epa, "linear")[0]
 
     @classmethod
-    def normalized_sequence_entropy_linear_forgetting(cls, log_path):
-        epa = Complexity.path_to_epa(log_path)
+    def normalized_sequence_entropy_linear_forgetting(cls, log):
+        epa = Complexity.log_to_epa(log)
         return Complexity.log_complexity(epa, "linear")[1]
 
     @classmethod
-    def sequence_entropy_exponential_forgetting(cls, log_path):
-        epa = Complexity.path_to_epa(log_path)
+    def sequence_entropy_exponential_forgetting(cls, log):
+        epa = Complexity.log_to_epa(log)
         return Complexity.log_complexity(epa, "exp")[0]
 
     @classmethod
-    def normalized_sequence_entropy_exponential_forgetting(cls, log_path):
-        epa = Complexity.path_to_epa(log_path)
+    def normalized_sequence_entropy_exponential_forgetting(cls, log):
+        epa = Complexity.log_to_epa(log)
         return Complexity.log_complexity(epa, "exp")[1]
 

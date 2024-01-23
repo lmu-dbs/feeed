@@ -2,7 +2,6 @@ import inspect
 import math
 import pandas as pd
 import pm4py
-import subprocess
 
 from .feature import Feature
 
@@ -46,7 +45,7 @@ class ActivityType(Node):
             + "</sub>"
             + ">"
         )
-        self.name = activity + "Type" + str(c) + "_" + str(self.j)
+        self.name = str(activity) + "Type" + str(c) + "_" + str(self.j)
         self.accepting = accepting
 
     def getPrefix(self):

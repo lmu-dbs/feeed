@@ -436,19 +436,32 @@ class Complexity(Feature):
             log_complexity_exp = 0
             for AT in Complexity.flatten(pa.activity_types.values()):
                 for event in AT.sequence:
-                    log_complexity_exp += math.exp(
-                        (-(last_timestamp - event.timestamp).total_seconds() / timespan) * k
-                    )
+                    try:
+                        log_complexity_exp += math.exp(
+                            (-(last_timestamp - event.timestamp).total_seconds() / timespan) * k
+                        )
+                    except ValueError:
+                        log_complexity_exp += math.exp(
+                            (-(last_timestamp - event.timestamp).total_seconds() / (timespan+1e-6)) * k
+                        )
+
 
             log_complexity_exp = math.log(log_complexity_exp) * log_complexity_exp
             for i in list(pa.c_index.keys())[1:]:
                 e = 0
                 for AT in pa.c_index[i]:
                     for event in AT.sequence:
-                        e += math.exp(
-                            (-(last_timestamp - event.timestamp).total_seconds() / timespan)
-                            * k
-                        )
+                        try:
+                            e += math.exp(
+                                (-(last_timestamp - event.timestamp).total_seconds() / timespan)
+                                * k
+                            )
+                        except ValueError:
+                            e += math.exp(
+                                (-(last_timestamp - event.timestamp).total_seconds() / (timespan+1e-6))
+                                * k
+                            )
+
                 log_complexity_exp -= math.log(e) * e
             return log_complexity_exp, (log_complexity_exp / normalize)
         else:

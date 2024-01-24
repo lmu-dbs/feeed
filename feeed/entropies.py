@@ -229,13 +229,13 @@ class Entropies(Feature):
         return round(Entropies.entropy_k_block(log, k)/k,3)
 
     @classmethod
-    def entropy_knn_3_flattened(cls, log,k=3):
+    def entropy_knn_3(cls, log,k=3):
         return Entropies.entropy_flattened_knn(log,k)
 
     @classmethod
-    def entropy_knn_5_flattened(cls, log,k=5):
+    def entropy_knn_5(cls, log,k=5):
         return Entropies.entropy_flattened_knn(log,k)
 
     @classmethod
-    def entropy_knn_7_flattened(cls, log,k=7):
+    def entropy_knn_7(cls, log,k=7):
         return Entropies.entropy_flattened_knn(log,k)

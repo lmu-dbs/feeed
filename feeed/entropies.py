@@ -71,7 +71,7 @@ class Entropies(Feature):
 
         return neighbour_list
 
-        # Calculating knn entropies
+    # Calculating knn entropies
     def entropy_flattened_knn(log, k=1,d=1):
         unique_traces = variants_filter.get_variants(log)
         unique_traces = list(unique_traces)

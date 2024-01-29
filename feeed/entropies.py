@@ -165,44 +165,43 @@ class Entropies(Feature):
         return round(-substring_entropy,3)
 
     @classmethod
-    def entropy_lempel_ziv(cls, log):
-        unique_traces = [tuple(event["concept:name"] for event in trace) for trace in log]
-        N, N_w, words = 0, 0, set()
-
-        for trace in unique_traces:
-            word = ""
-            for activity in trace:
-                word += activity
-                if word not in words:
-                    words.add(word)
-                    word = ""
+    def entropy_lempel_ziv(cls,log):
+        
+        all_traces = [tuple(event["concept:name"] for event in trace) for trace in log] # List of tuples
+        N, N_w, words,previous_encountered = 0, 0, set(),[]
+        for trace in all_traces:
+            if trace not in previous_encountered:
+                previous_encountered.append(trace)
+                word = ""
+                for activity in trace:
+                    word += activity
+                    if word not in words:
+                        words.add(word)
+                        word = ""
 
             N += len(trace)
 
         N_w = len(words)
-
-        lempel_zev_entropy = N_w * math.log2(N) / N
-        return round(lempel_zev_entropy,3)
+        return round((N_w * math.log2(N)) / N,3)
 
     @classmethod
     def entropy_lempel_ziv_flattened(cls,log):
         unique_traces = list(variants_filter.get_variants(log))
-        N, N_w, words = 0, 0, set()
-
+        N, N_w, words,previous_encountered = 0, 0, set(),[]
         for trace in unique_traces:
-            word = ""
-            for activity in trace:
-                word += activity
-                if word not in words:
-                    words.add(word)
-                    word = ""
+            if trace not in previous_encountered:
+                previous_encountered.append(trace)
+                word = ""
+                for activity in trace:
+                    word += activity
+                    if word not in words:
+                        words.add(word)
+                        word = ""
 
             N += len(trace)
 
         N_w = len(words)
-        
-        lempel_zev_entropy = N_w * math.log2(N) / N
-        return round(lempel_zev_entropy,3)
+        return round((N_w * math.log2(N)) / N,3)
         
 
     @classmethod

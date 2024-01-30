@@ -371,7 +371,10 @@ class Complexity(Feature):
                                     1
                                     - (last_timestamp - event.timestamp).total_seconds() / (timespan+1e-6)
                             )
-                log_complexity_linear -= math.log(e) * e
+                try:
+                    log_complexity_linear -= math.log(e) * e
+                except ValueError:
+                    log_complexity_linear -= math.log(1e-6) * 1e-6
 
             return log_complexity_linear, (log_complexity_linear / normalize)
 
@@ -407,7 +410,11 @@ class Complexity(Feature):
                                 * k
                             )
 
-                log_complexity_exp -= math.log(e) * e
+                try:
+                    log_complexity_exp -= math.log(e) * e
+                except ValueError:
+                    log_complexity_exp -= math.log(1e-6) * 1e-6
+
             return log_complexity_exp, (log_complexity_exp / normalize)
         else:
             return None, None

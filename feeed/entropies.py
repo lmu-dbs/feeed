@@ -20,6 +20,7 @@ class Entropies(Feature):
 
     # Helper function to calculate entropy of k_block_ratio and k_block_diff
     def entropy_k_block(log, k=1):
+        # k represents the block size
         all_k_object_substrings = [trace[i:i + k] for trace in (tuple(event["concept:name"] for event in trace) for trace in log) for i in range(len(trace) - k + 1)]
 
         k_sub_counts = Counter(all_k_object_substrings)
@@ -229,13 +230,13 @@ class Entropies(Feature):
         return round(Entropies.entropy_k_block(log, k)/k,3)
 
     @classmethod
-    def entropy_knn_3(cls, log,k=3):
-        return Entropies.entropy_flattened_knn(log,k)
+    def entropy_knn_3(cls, log): # Flattened knn entropy
+        return Entropies.entropy_flattened_knn(log,k=3)
 
     @classmethod
-    def entropy_knn_5(cls, log,k=5):
-        return Entropies.entropy_flattened_knn(log,k)
+    def entropy_knn_5(cls, log): # Flattened knn entropy
+        return Entropies.entropy_flattened_knn(log,k=5)
 
     @classmethod
-    def entropy_knn_7(cls, log,k=7):
-        return Entropies.entropy_flattened_knn(log,k)
+    def entropy_knn_7(cls, log): # Flattened knn entropy
+        return Entropies.entropy_flattened_knn(log,k=7)

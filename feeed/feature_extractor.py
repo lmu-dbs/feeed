@@ -102,10 +102,7 @@ def extract_features(event_logs_path, feature_types=None):
         start_feat = dt.now()
         ft_type = feature_type(ft_name)
 
-        if ft_type == "entropies":
-            feature_values = eval(f"{ft_type}(feature_names =['{ft_name}']).extract(event_logs_path)")
-        else:
-            feature_values = eval(f"{ft_type}(feature_names=['{ft_name}']).extract(log)")
+        feature_values = eval(f"{ft_type}(feature_names=['{ft_name}']).extract(log)")
         features = {**features, **feature_values}
 
         log_info =  f"     INFO: {log_name} starting at {len(features)}, {ft_name} from {ft_type} took {dt.now()-start_feat} sec, "

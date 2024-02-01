@@ -6,7 +6,7 @@ from .trace_variant import TraceVariant as trace_variant
 from .activities import Activities as activities
 from .start_activities import StartActivities as start_activities
 from .end_activities import EndActivities as end_activities
-from .entropies import Entropies as entropies
+from .eventropies import Eventropies as eventropies
 from .complexity import Complexity as complexity
 from .time import TimeBased as time_based
 
@@ -20,7 +20,7 @@ FEATURE_TYPES = [
     "activities",
     "start_activities",
     "end_activities",
-    "entropies",
+    "eventropies",
     "complexity",
     "time_based",
     ]

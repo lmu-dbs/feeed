@@ -1,2 +1,8 @@
 __pycache__/
 test_logs/
+feeed/eventropy/
+exp.ipynb
+feeed/internal_entropies.py
+feeed/entropies_java.py
+eda.ipynb
+*.csv

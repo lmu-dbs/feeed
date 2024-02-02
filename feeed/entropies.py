@@ -93,7 +93,7 @@ class Entropies(Feature):
 
     # Extractable Features
     @classmethod
-    def entropy_trace(cls, log):
+    def eventropy_trace(cls, log):
         # Get unique traces and their counts
         trace_counts = Counter(tuple(event["concept:name"] for event in trace) for trace in log)
 
@@ -103,7 +103,7 @@ class Entropies(Feature):
         return round(-trace_entropy,3)  # Use negative sign to follow the convention of minimizing entropy
 
     @classmethod
-    def entropy_prefix(cls, log): # Considers prefixes amongst traces
+    def eventropy_prefix(cls, log): # Considers prefixes amongst traces
         # Get unique traces
         unique_traces = [tuple(event["concept:name"] for event in trace) for trace in log]
 
@@ -120,7 +120,7 @@ class Entropies(Feature):
         return round(-prefix_entropy,3)
 
     @classmethod
-    def entropy_prefix_flattened(cls,log): # Considers prefixes amongst variants
+    def eventropy_prefix_flattened(cls,log): # Considers prefixes amongst variants
         unique_traces = variants_filter.get_variants(log)
 
         # Generate all possible prefixes
@@ -136,7 +136,7 @@ class Entropies(Feature):
         return round(-prefix_entropy,3)
 
     @classmethod
-    def entropy_global_block(cls, log):
+    def eventropy_global_block(cls, log):
         all_traces = [tuple(event["concept:name"] for event in trace) for trace in log]
 
         # Generate all possible substrings for all traces
@@ -151,7 +151,7 @@ class Entropies(Feature):
         return round(-substring_entropy,3)
     
     @classmethod
-    def entropy_global_block_flattened(cls,log):
+    def eventropy_global_block_flattened(cls,log):
         all_traces = variants_filter.get_variants(log)
         
         # Generate all possible substrings for all traces
@@ -166,7 +166,7 @@ class Entropies(Feature):
         return round(-substring_entropy,3)
 
     @classmethod
-    def entropy_lempel_ziv(cls,log):
+    def eventropy_lempel_ziv(cls,log):
         
         all_traces = [tuple(event["concept:name"] for event in trace) for trace in log] # List of tuples
         N, N_w, words,previous_encountered = 0, 0, set(),[]
@@ -186,7 +186,7 @@ class Entropies(Feature):
         return round((N_w * math.log2(N)) / N,3)
 
     @classmethod
-    def entropy_lempel_ziv_flattened(cls,log):
+    def eventropy_lempel_ziv_flattened(cls,log):
         unique_traces = list(variants_filter.get_variants(log))
         N, N_w, words,previous_encountered = 0, 0, set(),[]
         for trace in unique_traces:
@@ -206,37 +206,37 @@ class Entropies(Feature):
         
 
     @classmethod
-    def entropy_k_block_diff_1(cls, log,k=1):
+    def eventropy_k_block_diff_1(cls, log,k=1):
         return round(Entropies.entropy_k_block(log, k) - Entropies.entropy_k_block(log, k-1),3)
 
     @classmethod
-    def entropy_k_block_diff_3(cls, log,k=3):
+    def eventropy_k_block_diff_3(cls, log,k=3):
         return round(Entropies.entropy_k_block(log, k) - Entropies.entropy_k_block(log, k-1),3)
 
     @classmethod
-    def entropy_k_block_diff_5(cls, log,k=5):
+    def eventropy_k_block_diff_5(cls, log,k=5):
         return round(Entropies.entropy_k_block(log, k) - Entropies.entropy_k_block(log, k-1),3)
 
     @classmethod
-    def entropy_k_block_ratio_1(cls, log,k=1):
+    def eventropy_k_block_ratio_1(cls, log,k=1):
         return round(Entropies.entropy_k_block(log, k)/k,3)
 
     @classmethod
-    def entropy_k_block_ratio_3(cls, log,k=3):
+    def eventropy_k_block_ratio_3(cls, log,k=3):
         return round(Entropies.entropy_k_block(log, k)/k,3)
 
     @classmethod
-    def entropy_k_block_ratio_5(cls, log,k=5):
+    def eventropy_k_block_ratio_5(cls, log,k=5):
         return round(Entropies.entropy_k_block(log, k)/k,3)
 
     @classmethod
-    def entropy_knn_3(cls, log): # Flattened knn entropy
+    def eventropy_knn_3(cls, log): # Flattened knn entropy
         return Entropies.entropy_flattened_knn(log,k=3)
 
     @classmethod
-    def entropy_knn_5(cls, log): # Flattened knn entropy
+    def eventropy_knn_5(cls, log): # Flattened knn entropy
         return Entropies.entropy_flattened_knn(log,k=5)
 
     @classmethod
-    def entropy_knn_7(cls, log): # Flattened knn entropy
+    def eventropy_knn_7(cls, log): # Flattened knn entropy
         return Entropies.entropy_flattened_knn(log,k=7)

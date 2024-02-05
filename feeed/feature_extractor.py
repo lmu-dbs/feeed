@@ -7,7 +7,7 @@ from .activities import Activities as activities
 from .start_activities import StartActivities as start_activities
 from .end_activities import EndActivities as end_activities
 from .eventropies import Eventropies as eventropies
-from .complexity import Complexity as complexity
+from .epa_based import Epa_based as epa_based
 from .time import TimeBased as time_based
 
 from datetime import datetime as dt
@@ -21,7 +21,7 @@ FEATURE_TYPES = [
     "start_activities",
     "end_activities",
     "eventropies",
-    "complexity",
+    "epa_based",
     "time_based",
     ]
 

@@ -161,7 +161,7 @@ class Graph:
 
     def to_plain_log(self):
         return sorted(
-            Complexity.flatten([node.sequence for node in self.nodes if node != self.root]),
+            Epa_based.flatten([node.sequence for node in self.nodes if node != self.root]),
             key=lambda event: event.timestamp,
         )
 
@@ -181,18 +181,18 @@ class Graph:
         return pm4py.objects.log.obj.EventLog(traces.values())
 
 
-class Complexity(Feature):
-    def __init__(self, feature_names='complexity'):
-        self.feature_type = "complexity"
-        self.available_class_methods = dict(inspect.getmembers(Complexity, predicate=inspect.ismethod))
+class Epa_based(Feature):
+    def __init__(self, feature_names='epa_based'):
+        self.feature_type = "epa_based"
+        self.available_class_methods = dict(inspect.getmembers(Epa_based, predicate=inspect.ismethod))
         if self.feature_type in feature_names:
             self.feature_names = [*self.available_class_methods.keys()]
         else:
             self.feature_names = feature_names
 
     def log_to_epa(pm4py_log):
-        log = Complexity.generate_log(pm4py_log)
-        epa = Complexity.build_graph(log)
+        log = Epa_based.generate_log(pm4py_log)
+        epa = Epa_based.build_graph(log)
         return epa
 
     def generate_log(pm4py_log, verbose=False):
@@ -246,7 +246,7 @@ class Complexity(Feature):
         out_list = []
         for item in in_list:
             if isinstance(item, list):
-                out_list.extend(Complexity.flatten(item))
+                out_list.extend(Epa_based.flatten(item))
             else:
                 out_list.append(item)
         return out_list
@@ -255,7 +255,7 @@ class Complexity(Feature):
     def build_graph(log, verbose=False, accepting=False):
         def add_events_to_graph(pa, log, verbose=False):
             for event in log:
-                Complexity.add_event_to_graph(event, pa, verbose=verbose)
+                Epa_based.add_event_to_graph(event, pa, verbose=verbose)
             pa.nodes.sort(key=lambda node: (node.c, node.j))
             return pa
         if len(log) == 0:
@@ -317,7 +317,7 @@ class Complexity(Feature):
         return c_index
 
     def graph_complexity(pa):
-        pa.c_index = Complexity.create_c_index(pa)
+        pa.c_index = Epa_based.create_c_index(pa)
         graph_complexity = math.log(len(pa.nodes) - 1) * (len(pa.nodes) - 1)
         normalize = graph_complexity
         for i in list(pa.c_index.keys())[1:]:
@@ -327,12 +327,12 @@ class Complexity(Feature):
         return graph_complexity, (graph_complexity / normalize)
 
     def log_complexity(pa, forgetting=None, k=1):
-        pa.c_index = Complexity.create_c_index(pa)
-        normalize = sum([len(AT.sequence) for AT in Complexity.flatten(pa.activity_types.values())])
+        pa.c_index = Epa_based.create_c_index(pa)
+        normalize = sum([len(AT.sequence) for AT in Epa_based.flatten(pa.activity_types.values())])
         normalize = normalize * math.log(normalize)
         if not forgetting:
             length = 0
-            for AT in Complexity.flatten(pa.activity_types.values()):
+            for AT in Epa_based.flatten(pa.activity_types.values()):
                 length += len(AT.sequence)
             log_complexity = math.log(length) * length
             for i in list(pa.c_index.keys())[1:]:
@@ -344,7 +344,7 @@ class Complexity(Feature):
             last_timestamp = pa.get_last_timestamp()
             timespan = pa.get_timespan()
             log_complexity_linear = 0
-            for AT in Complexity.flatten(pa.activity_types.values()):
+            for AT in Epa_based.flatten(pa.activity_types.values()):
                 for event in AT.sequence:
                     try:
                         log_complexity_linear += (
@@ -382,7 +382,7 @@ class Complexity(Feature):
             last_timestamp = pa.get_last_timestamp()
             timespan = pa.get_timespan()
             log_complexity_exp = 0
-            for AT in Complexity.flatten(pa.activity_types.values()):
+            for AT in Epa_based.flatten(pa.activity_types.values()):
                 for event in AT.sequence:
                     try:
                         log_complexity_exp += math.exp(
@@ -420,42 +420,42 @@ class Complexity(Feature):
             return None, None
 
     @classmethod
-    def variant_entropy(cls, log):
-        epa = Complexity.log_to_epa(log)
-        return Complexity.graph_complexity(epa)[0]
+    def epa_variant_entropy(cls, log):
+        epa = Epa_based.log_to_epa(log)
+        return Epa_based.graph_complexity(epa)[0]
 
     @classmethod
-    def normalized_variant_entropy(cls, log):
-        epa = Complexity.log_to_epa(log)
-        return Complexity.graph_complexity(epa)[1]
+    def epa_normalized_variant_entropy(cls, log):
+        epa = Epa_based.log_to_epa(log)
+        return Epa_based.graph_complexity(epa)[1]
 
     @classmethod
-    def sequence_entropy(cls, log):
-        epa = Complexity.log_to_epa(log)
-        return Complexity.log_complexity(epa)[0]
+    def epa_sequence_entropy(cls, log):
+        epa = Epa_based.log_to_epa(log)
+        return Epa_based.log_complexity(epa)[0]
 
     @classmethod
-    def normalized_sequence_entropy(cls, log):
-        epa = Complexity.log_to_epa(log)
-        return Complexity.log_complexity(epa)[1]
+    def epa_normalized_sequence_entropy(cls, log):
+        epa = Epa_based.log_to_epa(log)
+        return Epa_based.log_complexity(epa)[1]
 
     @classmethod
-    def sequence_entropy_linear_forgetting(cls, log):
-        epa = Complexity.log_to_epa(log)
-        return Complexity.log_complexity(epa, "linear")[0]
+    def epa_sequence_entropy_linear_forgetting(cls, log):
+        epa = Epa_based.log_to_epa(log)
+        return Epa_based.log_complexity(epa, "linear")[0]
 
     @classmethod
-    def normalized_sequence_entropy_linear_forgetting(cls, log):
-        epa = Complexity.log_to_epa(log)
-        return Complexity.log_complexity(epa, "linear")[1]
+    def epa_normalized_sequence_entropy_linear_forgetting(cls, log):
+        epa = Epa_based.log_to_epa(log)
+        return Epa_based.log_complexity(epa, "linear")[1]
 
     @classmethod
-    def sequence_entropy_exponential_forgetting(cls, log):
-        epa = Complexity.log_to_epa(log)
-        return Complexity.log_complexity(epa, "exp")[0]
+    def epa_sequence_entropy_exponential_forgetting(cls, log):
+        epa = Epa_based.log_to_epa(log)
+        return Epa_based.log_complexity(epa, "exp")[0]
 
     @classmethod
-    def normalized_sequence_entropy_exponential_forgetting(cls, log):
-        epa = Complexity.log_to_epa(log)
-        return Complexity.log_complexity(epa, "exp")[1]
+    def epa_normalized_sequence_entropy_exponential_forgetting(cls, log):
+        epa = Epa_based.log_to_epa(log)
+        return Epa_based.log_complexity(epa, "exp")[1]
 

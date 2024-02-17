@@ -186,9 +186,8 @@ class Epa_based(Feature):
     def __init__(self, feature_names='epa_based'):
         self.feature_type = "epa_based"
         self.available_class_methods = dict(inspect.getmembers(Epa_based, predicate=inspect.ismethod))
-        self.featured_needed = ["epa_variant_entropy","epa_normalized_variant_entropy","epa_sequence_entropy","epa_normalized_sequence_entropy","epa_sequence_entropy_linear_forgetting","epa_normalized_sequence_entropy_linear_forgetting","epa_sequence_entropy_exponential_forgetting","epa_normalized_sequence_entropy_exponential_forgetting"]
         if self.feature_type in feature_names:
-            self.feature_names = [method for method in self.available_class_methods.keys() if method in self.featured_needed]
+            self.feature_names = [method for method in self.available_class_methods.keys() if not method.startswith('_')]
         else:
             self.feature_names = feature_names
 
@@ -427,6 +426,7 @@ class Epa_based(Feature):
     _cached_log_complexity_linear = None
     _cached_log_complexity_exp = None
 
+    # Helper functions (start with _)
     @classmethod
     def _calculate_epa(cls, log):
         if cls._cached_epa is None:

@@ -185,7 +185,8 @@ class Graph:
 class Epa_based(Feature):
     def __init__(self, feature_names='epa_based'):
         self.feature_type = "epa_based"
-        self.available_class_methods = dict(inspect.getmembers(Epa_based, predicate=inspect.ismethod))
+        # listing class methods in the order they were defined so that the cache can be reset in the last class method without looking it up
+        self.available_class_methods = {name: method.__get__(self, Epa_based) for name, method in vars(Epa_based).items() if isinstance(method, classmethod)}
         if self.feature_type in feature_names:
             self.feature_names = [method for method in self.available_class_methods.keys() if not method.startswith('_')]
         else:
@@ -499,4 +500,11 @@ class Epa_based(Feature):
     @classmethod
     def epa_normalized_sequence_entropy_exponential_forgetting(cls, log):
         log_complexity = cls._calculate_log_complexity_exp(log)
+        
+        #reset the cache
+        cls._cached_epa = None
+        cls._cached_graph_complexity = None
+        cls._cached_log_complexity = None
+        cls._cached_log_complexity_linear = None
+        cls._cached_log_complexity_exp = None
         return log_complexity[1]

@@ -185,6 +185,7 @@ class Graph:
 class Epa_based(Feature):
     def __init__(self, feature_names='epa_based'):
         self.feature_type = "epa_based"
+        # listing class methods in the order they were defined so that the cache can be reset in the last class method without looking it up
         self.available_class_methods = {name: method.__get__(self, Epa_based) for name, method in vars(Epa_based).items() if isinstance(method, classmethod)}
         if self.feature_type in feature_names:
             self.feature_names = [method for method in self.available_class_methods.keys() if not method.startswith('_')]

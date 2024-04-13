@@ -17,4 +17,4 @@ if __name__ == "__main__":
         print("JSON files are identical")
     else:
         print("JSON files differ")
-        # exit(1)
+        exit(1)

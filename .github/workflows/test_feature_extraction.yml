@@ -28,5 +28,5 @@ jobs:
       # Replace 'test_script.py' with the name of your Python script for testing
 
     - name: Compare output
-      run: diff output.txt expected_output.txt
+      run: diff output.json expected_output.json
       # Replace 'output.txt' and 'expected_output.txt' with the actual names of your output files

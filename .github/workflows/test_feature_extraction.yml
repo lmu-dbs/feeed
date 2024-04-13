@@ -29,5 +29,5 @@ jobs:
 
     - name: Compare output
       # run: python compare_output.py
-      run: diff output.txt expected_output.txt
+      run: diff output.json expected_output.json
     

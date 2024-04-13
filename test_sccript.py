@@ -14,5 +14,5 @@ def default_handler(obj):
         raise TypeError('Object of type %s is not JSON serializable' % type(obj))
 
 # Write the dictionary to a JSON file
-with open("expected_output.json", "w") as json_file:
+with open("output.json", "w") as json_file:
     json.dump(features, json_file, default=default_handler)

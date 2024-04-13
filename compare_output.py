@@ -1,5 +1,4 @@
 import json
-
 def compare_json(file1, file2):
     with open(file1, 'r') as f:
         json_data1 = json.load(f)

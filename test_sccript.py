@@ -3,7 +3,7 @@ import numpy as np
 from feeed.feature_extractor import extract_features
 
 # Extract features as a dictionary
-features = extract_features("test_logs/BPI_Challenge_2013_closed_problems.xes")
+features = extract_features("test_logs/Sepsis.xes")
 
 def default_handler(obj):
     if hasattr(obj, '__dict__'):

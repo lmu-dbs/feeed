@@ -29,7 +29,7 @@ jobs:
 
     - name: Compare output
       run: |
-        diff=$(diff output.txt expected_output.txt)
+        diff=$(diff output.json expected_output.json)
         if [ $? -eq 0 ]; then
           echo "Outputs are identical"
         else

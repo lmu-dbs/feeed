@@ -24,4 +24,6 @@ if features == expected_output:
     print("JSON files are identical")
 else:
     print("JSON files differ")
+    print("Expected output: ", expected_output)
+    print("Actual output: ", features)
     exit(1)

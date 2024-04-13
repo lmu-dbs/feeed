@@ -25,7 +25,7 @@ jobs:
     - name: Run tests and compare output
       run: python test_sccript.py
 
-    # - name: Compare output
+    - name: Compare output
     #   run: python compare_output.py
-    #   # run: diff output.json expected_output.json
+      run: diff output.json expected_output.json
     

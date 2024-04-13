@@ -3,7 +3,7 @@ import numpy as np
 from feeed.feature_extractor import extract_features
 
 # Extract features as a dictionary
-features = extract_features("test_logs/BPI_Challenge_2013_closed_problems.xes")
+features = extract_features("test_logs/Sepsis.xes")
 
 def default_handler(obj):
     if hasattr(obj, '__dict__'):
@@ -14,5 +14,5 @@ def default_handler(obj):
         raise TypeError('Object of type %s is not JSON serializable' % type(obj))
 
 # Write the dictionary to a JSON file
-with open("expected_output.json", "w") as json_file:
+with open("output.json", "w") as json_file:
     json.dump(features, json_file, default=default_handler)

@@ -4,7 +4,6 @@ on:
   pull_request:
     branches:
       - main
-      # Add more branches as needed
 
 jobs:
   test:
@@ -26,6 +25,5 @@ jobs:
       run: python test_sccript.py
 
     - name: Compare output
-    #   run: python compare_output.py
       run: diff output.json expected_output.json
     

@@ -1,5 +1,5 @@
 import sys
-sys.path.append('..')#
+sys.path.append('..')
 import json
 import numpy as np
 from feeed.feature_extractor import extract_features

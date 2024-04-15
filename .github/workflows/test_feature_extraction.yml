@@ -11,7 +11,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    # Setting up a python envronment in order for the test script to run
+    # Setting up a python envronment  for the test script to run
     steps:
     - name: Checkout code
       uses: actions/checkout@v2

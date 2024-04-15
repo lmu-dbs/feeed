@@ -1,0 +1,33 @@
+name: Feature extraction debugging
+
+# Specifies when the action should run
+on:
+  pull_request:
+    branches:
+      - main
+
+# Specifies the jobs that are to be run
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    # Setting up a python envronment  for the test script to run
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.x
+
+    - name: Install dependencies
+      run: pip install .
+    
+    # Running the test script and comparing the output to the expected output
+    - name: Run tests and compare output
+      run: python main.py
+
+    - name: Compare output
+      run: diff output.json expected_output.json
+    

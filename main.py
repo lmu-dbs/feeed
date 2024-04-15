@@ -4,7 +4,7 @@ from feeed.feature_extractor import extract_features
 import json
 import numpy as np
 
-def test_extract_features(expected_output_path, log_path="test_logs/Sepsis.xes", by=None):
+def test_extract_features(expected_output_path, log_path="test_data/Sepsis.xes", by=None):
     print(f"RUNNING TEST: test_extract_features(expected_output_path={expected_output_path}, log_path={log_path}, by={by}")
     f = open(expected_output_path, 'r')
     expected_features = json.loads(f.read())
@@ -63,9 +63,9 @@ if __name__=='__main__':
               'accumulated_time', 'execution_time', 'remaining_time', 'within_day']
     start_log = dt.now()
 
-    features = test_extract_features('expected_output.json', by=BY_TYPE)
-    test_extract_features('expected_output_by_name.json', by=BY_NAME)
-    test_extract_features('expected_output_by_name.json')
+    features = test_extract_features('test_data/expected_output.json', by=BY_TYPE)
+    test_extract_features('test_data/expected_output_by_name.json', by=BY_NAME)
+    test_extract_features('test_data/expected_output_by_name.json')
 
     # Write the dictionary to a JSON file
     with open("output.json", "w") as json_file:

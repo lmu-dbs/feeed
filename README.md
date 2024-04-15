@@ -22,7 +22,7 @@ pip install feeed
 ```
 Run:
 ```shell
-python -c "from feeed.feature_extractor import extract_features; print(extract_features('test_logs/Sepsis.xes'))"
+python -c "from feeed.feature_extractor import extract_features; print(extract_features('test_data/Sepsis.xes'))"
 ```
 
 ## Usage
@@ -55,7 +55,7 @@ For the following examples we used Sepsis event data[1].
 #### Example 1:
 Passing sublist of feature_names, e.g. ['start_activities_min', 'end_activities_max'], to get a list of values for those features only.
 ```shell
-python -c "from feeed.feature_extractor import extract_features; print(extract_features('test_logs/Sepsis.xes',  ['start_activities_min', 'end_activities_max']))"
+python -c "from feeed.feature_extractor import extract_features; print(extract_features('test_data/Sepsis.xes',  ['start_activities_min', 'end_activities_max']))"
 ```
 outputs
 ```python
@@ -66,7 +66,7 @@ SUCCESSFULLY: 2 features for SEPSIS.xes took 0:00:00.342855 sec.
 #### Example 2:
 Passing sublist of feature_types, e.g. ['start_activities'], to get a list of values for the feature type 'start_activities' only
 ```shell
-python -c "from feeed.feature_extractor import extract_features; print(extract_features('test_logs/Sepsis.xes',  ['start_activities']))"
+python -c "from feeed.feature_extractor import extract_features; print(extract_features('test_data/Sepsis.xes',  ['start_activities']))"
 ```
 outputs
 ```python
@@ -78,17 +78,17 @@ SUCCESSFULLY: 12 features for Sepsis.xes took 0:00:01.946063 sec.
 By not passing any list of feature_types to get the full list of all feature values for all feature_types,
 from the shell
 ```shell
-python -c "from feeed.feature_extractor import extract_features; print(extract_features('test_logs/Sepsis.xes'))"
+python -c "from feeed.feature_extractor import extract_features; print(extract_features('test_data/Sepsis.xes'))"
 ```
 For the order of feature_names as in [Feature Type table](#feature-types):
 ```python
-python -c "from feeed.feature_extractor import extract_features; print(extract_features('test_logs/Sepsis.xes', ['n_traces', 'n_unique_traces', 'ratio_unique_traces_per_trace', 'trace_len_min', 'trace_len_max', 'trace_len_mean', 'trace_len_median', 'trace_len_mode', 'trace_len_std', 'trace_len_variance', 'trace_len_q1', 'trace_len_q3', 'trace_len_iqr', 'trace_len_geometric_mean', 'trace_len_geometric_std', 'trace_len_harmonic_mean', 'trace_len_skewness', 'trace_len_kurtosis', 'trace_len_coefficient_variation', 'trace_len_entropy', 'trace_len_hist1', 'trace_len_hist2', 'trace_len_hist3', 'trace_len_hist4', 'trace_len_hist5', 'trace_len_hist6', 'trace_len_hist7', 'trace_len_hist8', 'trace_len_hist9', 'trace_len_hist10', 'trace_len_skewness_hist', 'trace_len_kurtosis_hist', 'ratio_most_common_variant', 'ratio_top_1_variants', 'ratio_top_5_variants', 'ratio_top_10_variants', 'ratio_top_20_variants', 'ratio_top_50_variants', 'ratio_top_75_variants', 'mean_variant_occurrence', 'std_variant_occurrence', 'skewness_variant_occurrence', 'kurtosis_variant_occurrence', 'n_unique_activities', 'activities_min', 'activities_max', 'activities_mean', 'activities_median', 'activities_std', 'activities_variance', 'activities_q1', 'activities_q3', 'activities_iqr', 'activities_skewness', 'activities_kurtosis', 'n_unique_start_activities', 'start_activities_min', 'start_activities_max', 'start_activities_mean', 'start_activities_median', 'start_activities_std', 'start_activities_variance', 'start_activities_q1', 'start_activities_q3', 'start_activities_iqr', 'start_activities_skewness', 'start_activities_kurtosis', 'n_unique_end_activities', 'end_activities_min', 'end_activities_max', 'end_activities_mean', 'end_activities_median', 'end_activities_std', 'end_activities_variance', 'end_activities_q1', 'end_activities_q3', 'end_activities_iqr', 'end_activities_skewness', 'end_activities_kurtosis', 'eventropy_trace', 'eventropy_prefix', 'eventropy_global_block', 'eventropy_lempel_ziv', 'eventropy_k_block_diff_1', 'eventropy_k_block_diff_3', 'eventropy_k_block_diff_5', 'eventropy_k_block_ratio_1', 'eventropy_k_block_ratio_3', 'eventropy_k_block_ratio_5', 'eventropy_knn_3', 'eventropy_knn_5', 'eventropy_knn_7', 'epa_variant_entropy', 'epa_normalized_variant_entropy', 'epa_sequence_entropy', 'epa_normalized_sequence_entropy', 'epa_sequence_entropy_linear_forgetting', 'epa_normalized_sequence_entropy_linear_forgetting', 'epa_sequence_entropy_exponential_forgetting', 'epa_normalized_sequence_entropy_exponential_forgetting', 'accumulated_time', 'execution_time', 'remaining_time', 'within_day']))"
+python -c "from feeed.feature_extractor import extract_features; print(extract_features('test_data/Sepsis.xes', ['n_traces', 'n_unique_traces', 'ratio_unique_traces_per_trace', 'trace_len_min', 'trace_len_max', 'trace_len_mean', 'trace_len_median', 'trace_len_mode', 'trace_len_std', 'trace_len_variance', 'trace_len_q1', 'trace_len_q3', 'trace_len_iqr', 'trace_len_geometric_mean', 'trace_len_geometric_std', 'trace_len_harmonic_mean', 'trace_len_skewness', 'trace_len_kurtosis', 'trace_len_coefficient_variation', 'trace_len_entropy', 'trace_len_hist1', 'trace_len_hist2', 'trace_len_hist3', 'trace_len_hist4', 'trace_len_hist5', 'trace_len_hist6', 'trace_len_hist7', 'trace_len_hist8', 'trace_len_hist9', 'trace_len_hist10', 'trace_len_skewness_hist', 'trace_len_kurtosis_hist', 'ratio_most_common_variant', 'ratio_top_1_variants', 'ratio_top_5_variants', 'ratio_top_10_variants', 'ratio_top_20_variants', 'ratio_top_50_variants', 'ratio_top_75_variants', 'mean_variant_occurrence', 'std_variant_occurrence', 'skewness_variant_occurrence', 'kurtosis_variant_occurrence', 'n_unique_activities', 'activities_min', 'activities_max', 'activities_mean', 'activities_median', 'activities_std', 'activities_variance', 'activities_q1', 'activities_q3', 'activities_iqr', 'activities_skewness', 'activities_kurtosis', 'n_unique_start_activities', 'start_activities_min', 'start_activities_max', 'start_activities_mean', 'start_activities_median', 'start_activities_std', 'start_activities_variance', 'start_activities_q1', 'start_activities_q3', 'start_activities_iqr', 'start_activities_skewness', 'start_activities_kurtosis', 'n_unique_end_activities', 'end_activities_min', 'end_activities_max', 'end_activities_mean', 'end_activities_median', 'end_activities_std', 'end_activities_variance', 'end_activities_q1', 'end_activities_q3', 'end_activities_iqr', 'end_activities_skewness', 'end_activities_kurtosis', 'eventropy_trace', 'eventropy_prefix', 'eventropy_global_block', 'eventropy_lempel_ziv', 'eventropy_k_block_diff_1', 'eventropy_k_block_diff_3', 'eventropy_k_block_diff_5', 'eventropy_k_block_ratio_1', 'eventropy_k_block_ratio_3', 'eventropy_k_block_ratio_5', 'eventropy_knn_3', 'eventropy_knn_5', 'eventropy_knn_7', 'epa_variant_entropy', 'epa_normalized_variant_entropy', 'epa_sequence_entropy', 'epa_normalized_sequence_entropy', 'epa_sequence_entropy_linear_forgetting', 'epa_normalized_sequence_entropy_linear_forgetting', 'epa_sequence_entropy_exponential_forgetting', 'epa_normalized_sequence_entropy_exponential_forgetting', 'accumulated_time', 'execution_time', 'remaining_time', 'within_day']))"
 ```
 or in a python script
 ```python
 from feeed.feature_extractor import extract_features
 
-features = extract_features("test_logs/Sepsis.xes")
+features = extract_features("test_data/Sepsis.xes")
 
 ```
 outputs
@@ -158,11 +158,11 @@ class NewFeatures(Feature):
 After implementing the new feature; including it in the list of `feeed/feature_extractor.py` and importing the new method accordingly, you can quickly test it by running the:
 
 ```bash
-python -c "from feeed.feature_extractor import extract_features; print(extract_features('test_logs/SEPSIS.xes', ['new_feature_type']))"
+python -c "from feeed.feature_extractor import extract_features; print(extract_features('test_data/SEPSIS.xes', ['new_feature_type']))"
 ```
 and
 ```bash
-python -c "from feeed.feature_extractor import extract_features; print(extract_features('test_logs/SEPSIS.xes', ['new_feature_name_1', 'new_feature_name_2']))"
+python -c "from feeed.feature_extractor import extract_features; print(extract_features('test_data/SEPSIS.xes', ['new_feature_name_1', 'new_feature_name_2']))"
 ```
 
 ### Update documentation

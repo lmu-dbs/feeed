@@ -1,14 +1,17 @@
-name: Test Event Log Calculation
+name: Feature extraction debugging
 
+# Specifies when the action should run
 on:
   pull_request:
     branches:
       - main
 
+# Specifies the jobs that are run
 jobs:
   test:
     runs-on: ubuntu-latest
 
+    # Setting up a python envronment in order for the test script to run
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -20,9 +23,10 @@ jobs:
 
     - name: Install dependencies
       run: pip install -r requirements.txt
-
+    
+    # Running the test script and comparing the output to the expected output
     - name: Run tests and compare output
-      run: python test_sccript.py
+      run: python test_script.py
 
     - name: Compare output
       run: diff output.json expected_output.json

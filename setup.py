@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
         name = 'feeed',
-        version = '1.1.1',
+        version = '{{VERSION_PLACEHOLDER}}',
         description = 'Feature Extraction from Event Data',
         author = 'Andrea Maldonado, Gabriel Tavares',
         author_email = 'andreamalher.works@gmail.com, gabrielmrqstvrs@gmail.com',

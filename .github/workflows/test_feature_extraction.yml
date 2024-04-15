@@ -6,7 +6,7 @@ on:
     branches:
       - main
 
-# Specifies the jobs that are run
+# Specifies the jobs that are to be run
 jobs:
   test:
     runs-on: ubuntu-latest

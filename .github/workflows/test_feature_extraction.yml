@@ -26,8 +26,8 @@ jobs:
     
     # Running the test script and comparing the output to the expected output
     - name: Run tests and compare output
-      run: python test_script.py
+      run: python automated_testing_content/test_script.py
 
     - name: Compare output
-      run: diff output.json expected_output.json
+      run: diff output.json automated_testing_content/expected_output.json
     

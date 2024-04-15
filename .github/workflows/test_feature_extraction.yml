@@ -22,7 +22,7 @@ jobs:
         python-version: 3.x
 
     - name: Install dependencies
-      run: pip install -r requirements.txt
+      run: pip install .
     
     # Running the test script and comparing the output to the expected output
     - name: Run tests and compare output

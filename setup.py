@@ -9,7 +9,6 @@ setup(
         license = 'MIT',
         url='https://github.com/lmu-dbs/feeed.git',
         install_requires=[
-            'pandas==2.0.0',
             'tqdm==4.65.0',
             'pm4py==2.7.2',
             'scipy>=1.10.1',

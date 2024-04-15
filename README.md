@@ -16,7 +16,7 @@ Requirements:
 - Python > 3.9
 - [Java](https://www.java.com/en/download/)
 
-To directly use meta feature extraction methods via `import`
+To directly use meta feature extraction methods via `import`, install directly from [PyPi](https://pypi.org/project/feeed/) with
 ```shell
 pip install feeed
 ```

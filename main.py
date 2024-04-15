@@ -2,7 +2,7 @@ import json
 import numpy as np
 from feeed.feature_extractor import extract_features
 
-# Extract features as a dictionary
+#  Testing Extract features as a dictionary
 features = extract_features("test_logs/Sepsis.xes", feature_types=["simple_stats","trace_length","trace_variant","activities","start_activities","end_activities","eventropies","epa_based"])
 
 def default_handler(obj):

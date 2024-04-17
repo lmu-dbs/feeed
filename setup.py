@@ -1,13 +1,22 @@
 from setuptools import setup, find_packages
+from packaging.version import Version
+
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
+version_string = os.environ.get("VERSION_PLACEHOLDER", "1.2.0")
+version = Version(version_string)
 
 setup(
         name = 'feeed',
-        version = '{{VERSION_PLACEHOLDER}}',
+        version = str(version),
         description = 'Feature Extraction from Event Data',
         author = 'Andrea Maldonado, Gabriel Tavares',
         author_email = 'andreamalher.works@gmail.com, gabrielmrqstvrs@gmail.com',
         license = 'MIT',
         url='https://github.com/lmu-dbs/feeed.git',
+        long_description=long_description,
+         long_description_content_type="text/markdown",
         install_requires=[
             'tqdm==4.65.0',
             'pm4py==2.7.2',

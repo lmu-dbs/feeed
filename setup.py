@@ -1,5 +1,4 @@
 from setuptools import setup, find_packages
-#from packaging.version import Version
 import os
 
 with open("README.md", "r") as fh:
@@ -8,7 +7,6 @@ with open("README.md", "r") as fh:
 version_string = os.environ.get("VERSION_PLACEHOLDER", "1.2.0")
 print(version_string)
 version = version_string
-#version = Version(version_string)
 
 setup(
         name = 'feeed',

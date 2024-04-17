@@ -1,11 +1,12 @@
 from setuptools import setup, find_packages
-from packaging.version import Version
+import os
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 version_string = os.environ.get("VERSION_PLACEHOLDER", "1.2.0")
-version = Version(version_string)
+print(version_string)
+version = version_string
 
 setup(
         name = 'feeed',

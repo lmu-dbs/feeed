@@ -1,8 +1,9 @@
-# FEEED
-**Fe**ature **E**xtraction for **E**vent **D**ata
+# FEEED: **Fe**ature **E**xtraction from **E**vent **D**ata [[0]](#references)
 
-Features extracted by this tool stem from [[2]](#references),[[3]](#references),[[4]](#references),[[5]](#references).
+The analysis of event data is largely influenced by the effective characterization of descriptors. These descriptors serve as the building blocks of our understanding, encapsulating the behavior described within the event data. In light of these considerations, we introduce FEEED (**Fe**ature **E**xtraction for **E**vent **D**ata), an extendable tool for event data feature extraction. FEEED represents a significant advancement in event data behavior analysis, offering a range of features to empower analysts and data scientists in their pursuit of insightful, actionable, and understandable event data analysis. What sets FEEED apart is its unique capacity to act as a bridge between the worlds of data mining and process mining. In doing so, it promises to enhance the accuracy, comprehensiveness, and utility of characterizing event data for a diverse range of applications.
+
 A video tutorial on how to use this tool can be found [here](https://www.youtube.com/watch?v=wS6n3ngRRd8).
+If you'd like to learn more about how it works, see References below.
 
 ## Table of Contents
 
@@ -26,6 +27,7 @@ python -c "from feeed.feature_extractor import extract_features; print(extract_f
 ```
 
 ## Usage
+Features extracted by this tool stem from [[2]](#references),[[3]](#references),[[4]](#references),[[5]](#references).
 Output data contains at least one feature with a `feature_name` and a corresponding value obtained by that feature's specific computation. The schema looks like this:
 ```python
 {
@@ -170,7 +172,12 @@ When updating results and table in the documentation, please note that the featu
 
 Finally, consider submitting a pull request to our repository. We are looking forward to your new features! :)
 
+## Acknowledgements
+We thank [anirud](https://github.com/anirudh027) and [Nikolina R.](https://github.com/Niklkind) for assistance with the maintenance and automation of this repository, which greatly improved its usability.
+
+
 ## References
+0. Maldonado, A., Tavares, G.M., Oyamada, R.S., Ceravolo, P., & Seidl, T. (2023). FEEED: Feature Extraction from Event Data. ICPM Doctoral Consortium / Demo.
 1. Mannhardt, Felix (2016): Sepsis Cases - Event Log. Version 1. 4TU.ResearchData. dataset. https://doi.org/10.4121/uuid:915d2bfb-7e84-49ad-a286-dc35f063a460
 2. G. M. Tavares, S. Barbon Junior, E. Damiani, and P. Ceravolo, “Selecting optimal trace clustering pipelines with meta-learning,” in Intelligent Systems, J. C. Xavier-Junior and R. A. Rios, Eds. Cham: Springer
 International Publishing, 2022, pp. 150–164.

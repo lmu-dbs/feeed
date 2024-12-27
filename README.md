@@ -173,7 +173,7 @@ When updating results and table in the documentation, please note that the featu
 Finally, consider submitting a pull request to our repository. We are looking forward to your new features! :)
 
 ## Acknowledgements
-We thank [anirud](https://github.com/anirudh027) and [Nikolina R.](https://github.com/Niklkind) for assistance with the maintenance and automation of this repository, which greatly improved its usability.
+We thank [Anirudh](https://github.com/anirudh027) and [Nikolina R.](https://github.com/Niklkind) for assistance with the maintenance and automation of this repository, which greatly improved its usability.
 
 
 ## References

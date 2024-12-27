@@ -1,2 +1,6 @@
 __pycache__/
+build/
+dist/
+feeed.egg-info/
 test_data/
+.ipynb_checkpoints/

@@ -27,7 +27,7 @@ def default_handler(obj):
 if __name__=='__main__':
     BY_TYPE = ["simple_stats","trace_length","trace_variant","activities","start_activities",
                "end_activities","eventropies","epa_based"]
-    BY_NAME =['n_traces', 'n_unique_traces', 'ratio_variants_per_number_of_traces',
+    BY_NAME =['n_traces', 'n_variants', 'ratio_variants_per_number_of_traces',
               'trace_len_min', 'trace_len_max', 'trace_len_mean', 'trace_len_median',
               'trace_len_mode', 'trace_len_std', 'trace_len_variance', 'trace_len_q1',
               'trace_len_q3', 'trace_len_iqr', 'trace_len_geometric_mean', 'trace_len_geometric_std',

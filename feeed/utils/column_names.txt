@@ -1,7 +1,7 @@
 log
 n_traces
 n_unique_traces
-ratio_unique_traces_per_trace
+ratio_variants_per_number_of_traces
 n_events
 trace_len_min
 trace_len_max

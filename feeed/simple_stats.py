@@ -24,6 +24,6 @@ class SimpleStats(Feature):
         return len(variants)
 
     @classmethod
-    def ratio_unique_traces_per_trace(cls, log):
+    def ratio_variants_per_number_of_traces(cls, log):
         variants = variants_filter.get_variants(log)
         return len(variants)/len(log)

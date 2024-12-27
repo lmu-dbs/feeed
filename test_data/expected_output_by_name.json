@@ -1,7 +1,7 @@
 {"log": "Sepsis",
  "n_traces": 1050,
  "n_unique_traces": 846,
- "ratio_unique_traces_per_trace": 0.8057142857142857,
+ "ratio_variants_per_number_of_traces": 0.8057142857142857,
  "trace_len_coefficient_variation": 0.7916391922924689,
  "trace_len_entropy": 6.769403523350811,
  "trace_len_geometric_mean": 12.281860759040903,

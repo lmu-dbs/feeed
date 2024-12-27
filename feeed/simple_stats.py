@@ -19,7 +19,7 @@ class SimpleStats(Feature):
         return len(log)
 
     @classmethod
-    def n_unique_traces(cls, log):
+    def n_variants(cls, log):
         variants = variants_filter.get_variants(log)
         return len(variants)
 

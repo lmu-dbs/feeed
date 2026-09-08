@@ -19,6 +19,10 @@ class SimpleStats(Feature):
         return len(log)
 
     @classmethod
+    def n_events(cls, log):
+        return sum([len(trace) for trace in log])
+
+    @classmethod
     def n_variants(cls, log):
         variants = variants_filter.get_variants(log)
         return len(variants)

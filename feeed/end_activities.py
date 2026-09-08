@@ -35,6 +35,12 @@ class EndActivities(Feature):
         return len(log_end)
 
     @classmethod
+    def rel_unique_end_activities(cls, log):
+        from pm4py.algo.filtering.log.variants import variants_filter
+        log_end = EndActivities.log_end(log)
+        return len(log_end) / len(variants_filter.get_variants(log))
+
+    @classmethod
     def end_activities_min(cls, log):
         end_activities_occurrences = EndActivities.end_activities_occurrences(log)
         return np.min(end_activities_occurrences)

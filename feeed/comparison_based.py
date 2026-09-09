@@ -4,6 +4,7 @@ from lempel_ziv_complexity import lempel_ziv_complexity
 import editdistance
 
 from .feature import Feature
+from .activities import Activities
 from .simple_stats import SimpleStats
 
 class ComparisonBased(Feature):
@@ -15,15 +16,14 @@ class ComparisonBased(Feature):
         else:
             self.feature_names = feature_names
 
+    def consecutive_pairs(trace):
+        return [(trace[i-1]["concept:name"], trace[i]["concept:name"]) for i in range(1, len(trace))]
+
     @classmethod
     def number_of_successions(cls, log):
         set_of_successions = set()
         for trace in log:
-            for i in range(len(trace)):
-                if i > 0:
-                    pred = trace[i-1]["concept:name"]
-                    succ = trace[i]["concept:name"]
-                    set_of_successions.add((pred, succ))
+            set_of_successions.update(ComparisonBased.consecutive_pairs(trace))
         return len(set_of_successions)
 
     @classmethod
@@ -37,10 +37,7 @@ class ComparisonBased(Feature):
         parallel = '||' # e1 is followed by e2 in some trace, and e2 is followed by e1 in some trace
         incomparable = '#' # e1 is never followed by e2 in a trace, and e2 is never followed by e1 in a trace
         # get the set of events
-        events = set()
-        for trace in log:
-            for event in trace:
-                events.add(event["concept:name"])
+        events = set(Activities.activities(log).keys())
         # initialize the causal footprint with only 'incomparable'-entries
         causal_footprint = {}
         for event in events:
@@ -49,9 +46,7 @@ class ComparisonBased(Feature):
                 causal_footprint[event][other_event] = incomparable
         # enrich the causal footprint with the correct relations between events
         for trace in log:
-            for i in range(len(trace)-1):
-                e1 = trace[i]["concept:name"]
-                e2 = trace[i+1]["concept:name"]
+            for e1, e2 in ComparisonBased.consecutive_pairs(trace):
                 if e1 == e2:
                     causal_footprint[e1][e2] = parallel
                 elif causal_footprint[e1][e2] == precedes:
@@ -82,21 +77,11 @@ class ComparisonBased(Feature):
         # fix one trace in the event log
         for trace1 in log:
             # collect the event neighborhoods in the first trace
-            neighborhoods_trace1 = set()
-            previous_event = None
-            for event in trace1:
-                if previous_event != None:
-                    neighborhoods_trace1.add((previous_event, event["concept:name"]))
-                previous_event = event["concept:name"]
+            neighborhoods_trace1 = set(ComparisonBased.consecutive_pairs(trace1))
             # fix a second trace of the event log
             for trace2 in log:
                 # collect the event neighborhoods in the second trace
-                neighborhoods_trace2 = set()
-                previous_event = None
-                for event in trace2:
-                    if previous_event != None:
-                        neighborhoods_trace2.add((previous_event, event["concept:name"]))
-                    previous_event = event["concept:name"]
+                neighborhoods_trace2 = set(ComparisonBased.consecutive_pairs(trace2))
                 # calculate the affinity between trace1 and trace2
                 intersection = neighborhoods_trace1.intersection(neighborhoods_trace2)
                 union = neighborhoods_trace1.union(neighborhoods_trace2)
@@ -125,10 +110,7 @@ class ComparisonBased(Feature):
 
     @classmethod
     def deviation_from_random(cls, log):
-        activity_names = set()
-        for trace in log:
-            for event in trace:
-                activity_names.add(event["concept:name"])
+        activity_names = set(Activities.activities(log).keys())
         # initialize a dictionary that collects how often events follow each other
         neighborhood_frequencies = dict()
         for event1 in activity_names:
@@ -138,12 +120,9 @@ class ComparisonBased(Feature):
         # go through the event log and fill the previously initialized dictionary
         total_number_of_neighborhoods = 0
         for trace in log:
-            for i in range(len(trace)):
-                if i > 0:
-                    event1 = trace[i-1]["concept:name"]
-                    event2 = trace[i]["concept:name"]
-                    neighborhood_frequencies[event1][event2] += 1
-                    total_number_of_neighborhoods += 1
+            for event1, event2 in ComparisonBased.consecutive_pairs(trace):
+                neighborhood_frequencies[event1][event2] += 1
+                total_number_of_neighborhoods += 1
         # calculate the inverse deviation from random
         random_neighborhood_frequencies = total_number_of_neighborhoods / (len(activity_names)**2)
         inverse_dev_random = 0

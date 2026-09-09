@@ -47,15 +47,9 @@ class DistinctActivities(Feature):
     def distinct_activities_non_overlap(cls, log):
         overlap = 0
         for trace1 in log:
-            # collect the set of events in trace1
-            events_in_trace_1 = set()
-            for event in trace1:
-                events_in_trace_1.add(event["concept:name"])
+            events_in_trace_1 = DistinctActivities.distinct_activities_in_trace(trace1)
             for trace2 in log:
-                # collect the set of events in trace2
-                events_in_trace_2 = set()
-                for event in trace2:
-                    events_in_trace_2.add(event["concept:name"])
+                events_in_trace_2 = DistinctActivities.distinct_activities_in_trace(trace2)
                 # calculate the overlap between both sets
                 intersection = events_in_trace_1.intersection(events_in_trace_2)
                 union = events_in_trace_1.union(events_in_trace_2)

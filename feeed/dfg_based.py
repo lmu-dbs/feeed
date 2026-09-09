@@ -3,6 +3,7 @@ import numpy as np
 import networkx
 
 from .feature import Feature
+from .activities import Activities
 
 class DFGBased(Feature):
     def __init__(self, feature_names='dfg_based'):
@@ -25,10 +26,7 @@ class DFGBased(Feature):
         directly_follows_graph.add_node(start)
         directly_follows_graph.add_node(end)
         # get the set of activity names
-        events = set()
-        for trace in log:
-            for event in trace:
-                events.add(event["concept:name"])
+        events = set(Activities.activities(log).keys())
         # create a node for each distinct event
         for event in events:
             directly_follows_graph.add_node(event)

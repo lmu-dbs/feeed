@@ -14,6 +14,14 @@ class DFGBased(Feature):
         else:
             self.feature_names = feature_names
 
+    def extract(self, log):
+        dfg = DFGBased.directly_follows_graph(log)
+        output = {}
+        for feature_name in self.feature_names:
+            feature_fn = self.available_class_methods[feature_name]
+            output[feature_name] = feature_fn(log, dfg=dfg)
+        return output
+
     def directly_follows_graph(log):
         # check if the event log contains any traces
         if len(log) == 0:
@@ -41,69 +49,86 @@ class DFGBased(Feature):
         return directly_follows_graph
 
     @classmethod
-    def n_nodes_dfg(cls, log):
-        dfg = DFGBased.directly_follows_graph(log)
+    def n_nodes_dfg(cls, log, dfg=None):
+        if dfg is None:
+            dfg = DFGBased.directly_follows_graph(log)
         return dfg.number_of_nodes()
 
     @classmethod
-    def n_edges_dfg(cls, log):
-        dfg = DFGBased.directly_follows_graph(log)
+    def n_edges_dfg(cls, log, dfg=None):
+        if dfg is None:
+            dfg = DFGBased.directly_follows_graph(log)
         return dfg.number_of_edges()
 
     @classmethod
-    def coeff_of_connectivity_dfg(cls, log):
-        return DFGBased.n_edges_dfg(log) / DFGBased.n_nodes_dfg(log)
+    def coeff_of_connectivity_dfg(cls, log, dfg=None):
+        if dfg is None:
+            dfg = DFGBased.directly_follows_graph(log)
+        return DFGBased.n_edges_dfg(log, dfg=dfg) / DFGBased.n_nodes_dfg(log, dfg=dfg)
 
     @classmethod
-    def avg_node_degree_dfg(cls, log):
-        dfg = DFGBased.directly_follows_graph(log)
-        return sum([dfg.degree(node) for node in dfg.nodes]) / DFGBased.n_nodes_dfg(log)
+    def avg_node_degree_dfg(cls, log, dfg=None):
+        if dfg is None:
+            dfg = DFGBased.directly_follows_graph(log)
+        return sum([dfg.degree(node) for node in dfg.nodes]) / DFGBased.n_nodes_dfg(log, dfg=dfg)
 
     @classmethod
-    def max_node_degree_dfg(cls, log):
-        dfg = DFGBased.directly_follows_graph(log)
+    def max_node_degree_dfg(cls, log, dfg=None):
+        if dfg is None:
+            dfg = DFGBased.directly_follows_graph(log)
         return max([dfg.degree(node) for node in dfg.nodes])
 
     @classmethod
-    def density_dfg(cls, log):
-        number_of_nodes = DFGBased.n_nodes_dfg(log)
-        number_of_edges = DFGBased.n_edges_dfg(log)
+    def density_dfg(cls, log, dfg=None):
+        if dfg is None:
+            dfg = DFGBased.directly_follows_graph(log)
+        number_of_nodes = DFGBased.n_nodes_dfg(log, dfg=dfg)
+        number_of_edges = DFGBased.n_edges_dfg(log, dfg=dfg)
         max_number_of_edges = number_of_nodes * (number_of_nodes - 1)
         return number_of_edges / max_number_of_edges
 
     @classmethod
-    def structure_dfg(cls, log):
-         return 1 - (DFGBased.n_edges_dfg(log) / (DFGBased.n_nodes_dfg(log) ** 2))
+    def structure_dfg(cls, log, dfg=None):
+        if dfg is None:
+            dfg = DFGBased.directly_follows_graph(log)
+        return 1 - (DFGBased.n_edges_dfg(log, dfg=dfg) / (DFGBased.n_nodes_dfg(log, dfg=dfg) ** 2))
 
     @classmethod
-    def cyclomatic_number_dfg(cls, log):
-        return DFGBased.n_edges_dfg(log) - DFGBased.n_nodes_dfg(log) + 1
+    def cyclomatic_number_dfg(cls, log, dfg=None):
+        if dfg is None:
+            dfg = DFGBased.directly_follows_graph(log)
+        return DFGBased.n_edges_dfg(log, dfg=dfg) - DFGBased.n_nodes_dfg(log, dfg=dfg) + 1
 
     @classmethod
-    def n_cut_vertices_dfg(cls, log):
-        dfg = DFGBased.directly_follows_graph(log)
+    def n_cut_vertices_dfg(cls, log, dfg=None):
+        if dfg is None:
+            dfg = DFGBased.directly_follows_graph(log)
         undirected_dfg = dfg.to_undirected()
         return len(list(networkx.articulation_points(undirected_dfg)))
 
     @classmethod
-    def separability_ratio_dfg(cls, log):
-        return DFGBased.n_cut_vertices_dfg(log) / DFGBased.n_nodes_dfg(log)
+    def separability_ratio_dfg(cls, log, dfg=None):
+        if dfg is None:
+            dfg = DFGBased.directly_follows_graph(log)
+        return DFGBased.n_cut_vertices_dfg(log, dfg=dfg) / DFGBased.n_nodes_dfg(log, dfg=dfg)
 
     @classmethod
-    def sequentiality_ratio_dfg(cls, log):
-        dfg = DFGBased.directly_follows_graph(log)
+    def sequentiality_ratio_dfg(cls, log, dfg=None):
+        if dfg is None:
+            dfg = DFGBased.directly_follows_graph(log)
         sequential_nodes = [node for node in dfg.nodes if dfg.in_degree(node) < 2 and dfg.out_degree(node) < 2]
         num_sequential_arcs = 0
         for (u, v) in dfg.edges:
             if u in sequential_nodes and v in sequential_nodes:
                 num_sequential_arcs += 1
-        return num_sequential_arcs / DFGBased.n_nodes_dfg(log)
+        return num_sequential_arcs / DFGBased.n_nodes_dfg(log, dfg=dfg)
 
     @classmethod
-    def cyclicity_dfg(cls, log):
-        dfg = DFGBased.directly_follows_graph(log)
+    def cyclicity_dfg(cls, log, dfg=None):
+        if dfg is None:
+            dfg = DFGBased.directly_follows_graph(log)
         nodes_on_cycles = set()
         for component in networkx.strongly_connected_components(dfg):
             if len(component) > 1:
                 nodes_on_cycles.update(component)
-        return len(nodes_on_cycles) / DFGBased.n_nodes_dfg(log)
+        return len(nodes_on_cycles) / DFGBased.n_nodes_dfg(log, dfg=dfg)

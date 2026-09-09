@@ -72,29 +72,19 @@ class ComparisonBased(Feature):
         # check if the event log contains any traces
         if len(log) == 0:
             return 0
-        # calculate the average affinity of the traces in the event log
+        # collect the event neighborhoods of every trace once, instead of per pair
+        neighborhoods = [set(ComparisonBased.consecutive_pairs(trace)) for trace in log]
+        # affinity(trace1, trace2) == affinity(trace2, trace1), so only the pairs with
+        # i < j need to be computed; the diagonal (a trace compared to itself) is
+        # excluded entirely, since the original formula subtracts it out anyway
         sum_of_affinity_values = 0
-        # fix one trace in the event log
-        for trace1 in log:
-            # collect the event neighborhoods in the first trace
-            neighborhoods_trace1 = set(ComparisonBased.consecutive_pairs(trace1))
-            # fix a second trace of the event log
-            for trace2 in log:
-                # collect the event neighborhoods in the second trace
-                neighborhoods_trace2 = set(ComparisonBased.consecutive_pairs(trace2))
-                # calculate the affinity between trace1 and trace2
-                intersection = neighborhoods_trace1.intersection(neighborhoods_trace2)
-                union = neighborhoods_trace1.union(neighborhoods_trace2)
-                # if both traces have length at most one, they have no
-                # neighborhoods in common and we add 0 to the sum of affinity values
+        n = len(log)
+        for i in range(n):
+            for j in range(i + 1, n):
+                union = neighborhoods[i] | neighborhoods[j]
                 if len(union) > 0:
-                    affinity = len(intersection) / len(union)
-                    sum_of_affinity_values += affinity
-        # subtract the affinity values of a trace with itself, which is always 1
-        for trace in log:
-            if len(trace) > 1:
-                sum_of_affinity_values -= 1
-        return sum_of_affinity_values / (len(log) * (len(log) -1))
+                    sum_of_affinity_values += len(neighborhoods[i] & neighborhoods[j]) / len(union)
+        return (2 * sum_of_affinity_values) / (n * (n - 1))
 
     @classmethod
     def lempel_ziv_complexity(cls, log):
@@ -134,9 +124,12 @@ class ComparisonBased(Feature):
 
     @classmethod
     def average_edit_distance(cls, log):
+        # editdistance.eval(a, b) == editdistance.eval(b, a), so only the pairs with
+        # i < j need to be computed; the diagonal is always 0 and thus excluded
+        traces = list(log)
+        n = len(traces)
         sum_of_edit_distances = 0
-        for trace1 in log:
-            for trace2 in log:
-                edit_distance = editdistance.eval(trace1, trace2)
-                sum_of_edit_distances += edit_distance
-        return sum_of_edit_distances / (len(log) * (len(log) - 1))
+        for i in range(n):
+            for j in range(i + 1, n):
+                sum_of_edit_distances += editdistance.eval(traces[i], traces[j])
+        return (2 * sum_of_edit_distances) / (n * (n - 1))

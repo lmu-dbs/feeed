@@ -2,8 +2,8 @@ import inspect
 import numpy as np
 import networkx
 
-from .feature import Feature
-from .activities import Activities
+from ..feature import Feature
+from ..activities import Activities
 
 class DFGBased(Feature):
     def __init__(self, feature_names='dfg_based'):

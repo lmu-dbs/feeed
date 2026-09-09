@@ -3,7 +3,7 @@ import numpy as np
 import editdistance
 
 from pm4py.algo.filtering.log.variants import variants_filter
-from .feature import Feature
+from ..feature import Feature
 
 class Repetitions(Feature):
     def __init__(self, feature_names='repetitions'):

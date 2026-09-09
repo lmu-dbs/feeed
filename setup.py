@@ -29,7 +29,7 @@ setup(
             'editdistance>=0.6.2',
             'lempel-ziv-complexity>=0.2.2',
             ],
-        packages = ['feeed', 'feeed.utils'],
+        packages = ['feeed', 'feeed.utils', 'feeed.complexity'],
         classifiers=[
             'Development Status :: 3 - Alpha',
             'Intended Audience :: Science/Research',

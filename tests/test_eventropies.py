@@ -1,7 +1,7 @@
 import pandas as pd
 import pytest
 
-from feeed.eventropies import Eventropies as eventropies
+from feeed.complexity.eventropies import Eventropies as eventropies
 
 def test_eventropies(mock_log_data):
     features = eventropies(feature_names=['eventropies']).extract(mock_log_data)

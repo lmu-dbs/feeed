@@ -1,7 +1,7 @@
 import pandas as pd
 import pytest
 
-from feeed.repetitions import Repetitions as repetitions
+from feeed.complexity.repetitions import Repetitions as repetitions
 
 def test_repetitions(mock_log_data):
     features = repetitions(feature_names=['repetitions']).extract(mock_log_data)

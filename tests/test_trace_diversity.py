@@ -1,7 +1,7 @@
 import pandas as pd
 import pytest
 
-from feeed.trace_diversity import TraceDiversity as trace_diversity
+from feeed.complexity.trace_diversity import TraceDiversity as trace_diversity
 
 def test_trace_diversity(mock_log_data):
     features = trace_diversity(feature_names=['trace_diversity']).extract(mock_log_data)

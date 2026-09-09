@@ -1,7 +1,7 @@
 import pandas as pd
 import pytest
 
-from feeed.epa_based import Epa_based as epa_based
+from feeed.complexity.epa_based import Epa_based as epa_based
 
 def test_epa_based(mock_log_data):
     features = epa_based(feature_names=['epa_based']).extract(mock_log_data)

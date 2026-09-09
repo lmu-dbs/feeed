@@ -1,7 +1,7 @@
 import pandas as pd
 import pytest
 
-from feeed.dfg_based import DFGBased as dfg_based
+from feeed.complexity.dfg_based import DFGBased as dfg_based
 
 def test_dfg_based(mock_log_data):
     features = dfg_based(feature_names=['dfg_based']).extract(mock_log_data)

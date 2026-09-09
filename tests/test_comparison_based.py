@@ -1,7 +1,7 @@
 import pandas as pd
 import pytest
 
-from feeed.comparison_based import ComparisonBased as comparison_based
+from feeed.complexity.comparison_based import ComparisonBased as comparison_based
 
 def test_comparison_based(mock_log_data):
     features = comparison_based(feature_names=['comparison_based']).extract(mock_log_data)

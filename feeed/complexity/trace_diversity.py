@@ -2,11 +2,11 @@ import inspect
 import numpy as np
 
 from pm4py.algo.filtering.log.variants import variants_filter
-from .feature import Feature
+from ..feature import Feature
 from .comparison_based import ComparisonBased
 from .distinct_activities import DistinctActivities
-from .trace_length import TraceLength
-from .activities import Activities
+from ..trace_length import TraceLength
+from ..activities import Activities
 
 class TraceDiversity(Feature):
     def __init__(self, feature_names='trace_diversity'):

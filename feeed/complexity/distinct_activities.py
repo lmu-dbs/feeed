@@ -1,10 +1,10 @@
 import inspect
 import numpy as np
 
-from .feature import Feature
-from .trace_variant import TraceVariant
-from .simple_stats import SimpleStats
-from .trace_length import TraceLength
+from ..feature import Feature
+from ..trace_variant import TraceVariant
+from ..simple_stats import SimpleStats
+from ..trace_length import TraceLength
 
 class DistinctActivities(Feature):
     def __init__(self, feature_names='distinct_activities'):

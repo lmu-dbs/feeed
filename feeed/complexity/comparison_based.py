@@ -3,9 +3,9 @@ import numpy as np
 from lempel_ziv_complexity import lempel_ziv_complexity
 import editdistance
 
-from .feature import Feature
-from .activities import Activities
-from .simple_stats import SimpleStats
+from ..feature import Feature
+from ..activities import Activities
+from ..simple_stats import SimpleStats
 
 class ComparisonBased(Feature):
     def __init__(self, feature_names='comparison_based'):

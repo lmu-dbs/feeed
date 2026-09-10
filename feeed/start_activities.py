@@ -35,6 +35,12 @@ class StartActivities(Feature):
         return len(log_start)
 
     @classmethod
+    def rel_unique_start_activities(cls, log):
+        from pm4py.algo.filtering.log.variants import variants_filter
+        log_start = StartActivities.log_start(log)
+        return len(log_start) / len(variants_filter.get_variants(log))
+
+    @classmethod
     def start_activities_min(cls, log):
         start_activities_occurrences = StartActivities.start_activities_occurrences(log)
         return np.min(start_activities_occurrences)

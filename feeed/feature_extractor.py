@@ -3,11 +3,16 @@ import subprocess
 from .simple_stats import SimpleStats as simple_stats
 from .trace_length import TraceLength as trace_length
 from .trace_variant import TraceVariant as trace_variant
+from .complexity.trace_diversity import TraceDiversity as trace_diversity
 from .activities import Activities as activities
+from .complexity.distinct_activities import DistinctActivities as distinct_activities
 from .start_activities import StartActivities as start_activities
 from .end_activities import EndActivities as end_activities
-from .eventropies import Eventropies as eventropies
-from .epa_based import Epa_based as epa_based
+from .complexity.repetitions import Repetitions as repetitions
+from .complexity.comparison_based import ComparisonBased as comparison_based
+from .complexity.dfg_based import DFGBased as dfg_based
+from .complexity.eventropies import Eventropies as eventropies
+from .complexity.epa_based import Epa_based as epa_based
 from .time import TimeBased as time_based
 
 from datetime import datetime as dt
@@ -17,9 +22,14 @@ FEATURE_TYPES = [
     "simple_stats",
     "trace_length",
     "trace_variant",
+    "trace_diversity",
     "activities",
+    "distinct_activities",
     "start_activities",
     "end_activities",
+    "repetitions",
+    "comparison_based",
+    "dfg_based",
     "eventropies",
     "epa_based",
     "time_based",

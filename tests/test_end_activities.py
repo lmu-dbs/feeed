@@ -6,12 +6,12 @@ from feeed.end_activities import EndActivities as end_activities
 def test_end_activities(mock_log_data):
     features = end_activities(feature_names=['end_activities']).extract(mock_log_data)
     print(features)
-    assert len(features) == 12
+    assert len(features) == 13
     assert set(features.keys()) == set(['end_activities_iqr', 'end_activities_kurtosis',
                                         'end_activities_max', 'end_activities_mean', 'end_activities_median',
                                         'end_activities_min', 'end_activities_q1', 'end_activities_q3',
                                         'end_activities_skewness', 'end_activities_std',
-                                        'end_activities_variance', 'n_unique_end_activities'])
+                                        'end_activities_variance', 'n_unique_end_activities', 'rel_unique_end_activities'])
 
     assert features['end_activities_iqr']== pytest.approx(39.5)
     assert features['end_activities_kurtosis']== pytest.approx(2.5007579343413617)
@@ -25,3 +25,4 @@ def test_end_activities(mock_log_data):
     assert features['end_activities_std']== pytest.approx(112.91400014423114)
     assert features['end_activities_variance']== pytest.approx(12749.57142857143)
     assert features['n_unique_end_activities']== pytest.approx(14)
+    assert features['rel_unique_end_activities']== pytest.approx(0.016548463356973995)

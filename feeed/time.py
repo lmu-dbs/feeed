@@ -21,8 +21,9 @@ All the time features are currently measured in seconds, and they include:
 Essentially, there are methods that accept `group` or `X` as arguments. The former consists of a trace (i.e., grouped by case id) since we evaluate, for instance, the event timestamp with the previous one. The latter consists of the whole event log, since some operations can be performed element-wise (e.g., extracting the weekday from a timestamp column).
 """
 class TimeBased(Feature):
-    def __init__(self, feature_names='time_based'):
+    def __init__(self, feature_names='time_based', tz=None):
         self.feature_type="time_based"
+        self.tz = tz
         self.available_class_methods = dict(inspect.getmembers(TimeBased, predicate=inspect.ismethod))
         if self.feature_type in feature_names:
             self.feature_names = [*self.available_class_methods.keys()]
@@ -36,7 +37,7 @@ class TimeBased(Feature):
         for feature_name in feature_names:
             temp = {}
             feature_fn = self.available_class_methods[feature_name]
-            feature_value = feature_fn(log)
+            feature_value = feature_fn(log, tz=self.tz)
             temp[f"{feature_name}"] = feature_value
             if isinstance(temp[feature_name], dict):
                 output={**output, **dict(list(temp[feature_name].items()))}
@@ -71,27 +72,32 @@ class TimeBased(Feature):
     ref: https://github.com/raseidi/skpm/blob/main/skpm/event_feature_extraction/_time.py#L124
     """
     @classmethod
-    def execution_time(cls, log):
+    def execution_time(cls, log, **kwargs):
         group, ix_list, time_col, log = TimeBased.preprocess(log)
         execution_times =  group[time_col].diff().loc[ix_list].dt.total_seconds().fillna(0)
         return TimeBased.postprocess(log, execution_times, "execution_time")
 
     @classmethod
-    def accumulated_time(cls, log):
+    def accumulated_time(cls, log, **kwargs):
         group, ix_list, time_col, log = TimeBased.preprocess(log)
         accumulated_times = (group[time_col].apply(lambda x: x - x.min()).loc[ix_list].dt.total_seconds())
         return TimeBased.postprocess(log, accumulated_times, "accumulated_time")
 
     @classmethod
-    def remaining_time(cls, log):
+    def remaining_time(cls, log, **kwargs):
         group, ix_list, time_col, log = TimeBased.preprocess(log)
         remaining_times = group[time_col].apply(lambda x: x.max() - x).loc[ix_list].dt.total_seconds()
         return TimeBased.postprocess(log, remaining_times, "remaining_time")
 
     @classmethod
-    def within_day(cls, log):
+    def within_day(cls, log, tz=None, **kwargs):
+        # pm4py normalizes timestamps to UTC regardless of their original recorded
+        # offset, so recovering local time-of-day requires the log's own IANA tz.
         _, _, time_col, log = TimeBased.preprocess(log)
-        within_days = pd.to_timedelta(log[time_col].dt.time.astype(str)).dt.total_seconds().values
+        timestamps = log[time_col]
+        if tz is not None:
+            timestamps = timestamps.dt.tz_convert(tz)
+        within_days = pd.to_timedelta(timestamps.dt.time.astype(str)).dt.total_seconds().values
         return TimeBased.postprocess(log, within_days, "within_day")
 
 warnings.filterwarnings("ignore")

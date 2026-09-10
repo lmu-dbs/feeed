@@ -20,7 +20,8 @@ def test_extract_features_select_group():
                          'start_activities_q3': 17.0,
                          'start_activities_skewness': 1.7883562472303318,
                          'start_activities_std': 366.73787187399483,
-                         'start_activities_variance': 134496.66666666666
+                         'start_activities_variance': 134496.66666666666,
+                         'rel_unique_start_activities': 0.0070921985815602835
                          }
-    assert len(features) == 13
+    assert len(features) == 14
     assert features == EXPECTED_FEATURES

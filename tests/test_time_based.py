@@ -5,7 +5,7 @@ from feeed.time import TimeBased as time_based
 
 
 def test_time_based(mock_log_data):
-    features = time_based(feature_names=['time_based']).extract(mock_log_data)
+    features = time_based(feature_names=['time_based'], tz='Europe/Amsterdam').extract(mock_log_data)
     print(features)
     assert len(features) == 76
     assert set(features.keys()) == set(['accumulated_time_min', 'accumulated_time_max',
